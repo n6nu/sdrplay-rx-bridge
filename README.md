@@ -17,12 +17,17 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest beta — v0.99.1
+## Latest beta — v0.99.2
 
-Download: **[sdrplay-rx-bridge-0.99.1-setup.exe](sdrplay-rx-bridge-0.99.1-setup.exe)**
+Download: **[sdrplay-rx-bridge-0.99.2-setup.exe](sdrplay-rx-bridge-0.99.2-setup.exe)**
 
-What's new in v0.99.1: **transverter offset** (tester request — 10368 MHz
-operation through a 144 MHz IF transverter). New Settings → "Transverter
+What's new in v0.99.2: **higher-contrast IF / transverter readout**
+(tester request). The `IF tune: …  (offset …)` line under the main
+dial now renders bold red so the SDR-tune-vs-dial relationship is
+unmissable on every glance.
+
+What landed in v0.99.1: **transverter offset** (tester request — 10368 MHz
+operation through a 144 MHz IF transverter). Settings → "Transverter
 offset" field (signed MHz). The SDR is tuned to *(WSJT-X dial + offset)*
 while the GUI, WSJT-X, QMAP, and the LinradServer header all keep
 showing the operating dial. Example: dial 10368 MHz, offset −10224 MHz,

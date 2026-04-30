@@ -1,5 +1,13 @@
 # SDRplay RX Bridge — Release Notes
 
+## v0.99.2 — beta (2026-04-29)
+
+- **Higher-contrast IF / transverter-offset readout** (tester request).
+  The `IF tune: …  (offset …)` line under the main dial display now
+  renders in bold red (`#ff3333`) so the SDR-tune-vs-dial relationship
+  is unmissable on every glance. Same content as v0.99.1, just better
+  contrast.
+
 ## v0.99.1 — beta (2026-04-29)
 
 - **Transverter offset** (tester request — 10368 MHz operation through a
