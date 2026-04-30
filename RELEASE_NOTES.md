@@ -1,5 +1,36 @@
 # SDRplay RX Bridge — Release Notes
 
+## v0.99.3 — beta (2026-04-29)
+
+Diagnostic + RSPdx fixes prompted by tester report ("changing RF/IF
+gain doesn't affect audio reaching WSJT-X; spectrum doesn't change
+when WSJT-X retunes").
+
+- **RSPdx antenna picker.** New Settings → "Antenna (RSPdx)" combo
+  with Antenna A / B / C. The RSPdx has three RF inputs and v0.99.x
+  was implicitly defaulting to whatever the SDRplay API returned
+  (typically Antenna A). If the tester's signal was on Antenna B or
+  C, the ADC was seeing nothing — gain changes did nothing because
+  there was no signal to amplify; freq changes didn't move a flat
+  noise floor. The picker is greyed-out on non-RSPdx models. CLI:
+  `--antenna A|B|C`. INI key `sdrplay/antenna_sel`.
+- **RSPdx bias-T / RF notch / DAB notch now actually work.** v0.99.x
+  wrote those fields to RSPduo's params struct on every model and
+  fired RSPduo Update reasons regardless of hardware, which were
+  no-ops on RSPdx. v0.99.3 routes each model to its own params and
+  Update reason: RSPduo via `rspDuoTunerParams` + `Update_RspDuo_*`,
+  RSPdx via `devParams->rspDxParams` + `Update_RspDx_*` (Ext1 axis),
+  RSP1A/1B via `rsp1aTunerParams` + `rsp1aParams` + `Update_Rsp1a_*`,
+  RSP2 via `rsp2TunerParams` + `Update_Rsp2_*`. RSP1A / RSP1B / RSP2
+  bias-T and notch toggles will now work in addition to RSPduo /
+  RSPdx, but those models are still untested in actual operation.
+- **Periodic streaming-stats log line.** Every 5 seconds the bridge
+  now writes one diagnostic line:
+  `[Stats] RX <N> samples in 5s (≈ <sps> sps), peak |IQ|=<X> (<Y> dBFS), last freq update <ms> ms ago`
+  Lets a tester (or N6NU reading their `--console` log) answer "is
+  the SDR actually streaming?" and "is WSJT-X actually feeding freq
+  updates?" from one screenshot.
+
 ## v0.99.2 — beta (2026-04-29)
 
 - **Higher-contrast IF / transverter-offset readout** (tester request).
