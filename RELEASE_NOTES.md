@@ -1,5 +1,29 @@
 # SDRplay RX Bridge — Release Notes
 
+## v0.99.4 — beta (2026-04-30)
+
+Two tester requests landed in this build.
+
+- **Front-end overload indicator.** When the SDRplay API fires a
+  `PowerOverloadChange / Detected` event, a red `⚠ FRONT-END OVERLOAD`
+  banner appears under the dial display in the GUI for ~3 s after each
+  detection. The bridge has always acknowledged these events (so the API
+  resumes operation), but until now the user had no visual feedback.
+  Mirrors the overload indicator in HDSDR.
+- **Manual SDR frequency override.** New Settings checkbox **"Manual SDR
+  frequency (decouple from WSJT-X dial)"** plus an operating-MHz field.
+  When checked, WSJT-X UDP freq updates are dropped on the floor and the
+  SDR stays tuned to the manual freq. The transverter offset is still
+  applied. LinradServer reports the manual freq to QMAP so the wideband
+  waterfall labels reflect the actual SDR center. Useful for QMAP-only
+  observation when activity spans more than 90 kHz around a dial — the
+  operator can shift the QMAP window off the WSJT-X dial. **Note:**
+  WSJT-X narrowband audio decode only works when the WSJT-X dial
+  matches the manual freq; that's the trade-off the operator accepts
+  in this mode. A bold orange banner under the dial display makes the
+  override state unmistakable. CLI: `--manual-freq <MHz>`. INI keys:
+  `radio/manual_freq_override`, `radio/manual_freq_hz`.
+
 ## v0.99.3 — beta (2026-04-29)
 
 Diagnostic + RSPdx fixes prompted by tester report ("changing RF/IF

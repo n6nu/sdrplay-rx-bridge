@@ -17,13 +17,33 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest beta — v0.99.3
+## Latest beta — v0.99.4
 
-Download: **[sdrplay-rx-bridge-0.99.3-setup.exe](sdrplay-rx-bridge-0.99.3-setup.exe)**
+Download: **[sdrplay-rx-bridge-0.99.4-setup.exe](sdrplay-rx-bridge-0.99.4-setup.exe)**
 
-What's new in v0.99.3 — diagnostic + RSPdx fixes prompted by tester
-report ("changing RF/IF gain doesn't affect audio reaching WSJT-X;
-spectrum doesn't change when WSJT-X retunes"):
+What's new in v0.99.4 — two tester requests:
+
+- **Front-end overload indicator.** A red `⚠ FRONT-END OVERLOAD` banner
+  appears under the dial display whenever the SDRplay API reports a
+  power-overload event, latched for ~3 s after each detection. Mirrors
+  the overload indicator in HDSDR. Lets you spot a too-hot RF input
+  without watching the log.
+- **Manual SDR frequency override.** Settings → "Manual SDR frequency
+  (decouple from WSJT-X dial)" + an operating-MHz field. When checked,
+  the bridge ignores WSJT-X UDP freq updates and stays parked on the
+  manual freq. Transverter offset still applied. LinradServer reports
+  the manual freq to QMAP so the wideband waterfall labels match the
+  actual SDR center. Useful when activity spans more than 90 kHz around
+  a dial — you can shift the QMAP wideband window off the WSJT-X dial
+  to capture more of the band. **WSJT-X narrowband audio decode only
+  works when the WSJT-X dial matches the manual freq** (deliberate
+  trade-off for QMAP-priority observation). A bold orange banner under
+  the dial display makes the override state unmistakable. CLI:
+  `--manual-freq <MHz>`.
+
+Earlier in v0.99.3 — diagnostic + RSPdx fixes prompted by tester report
+("changing RF/IF gain doesn't affect audio reaching WSJT-X; spectrum
+doesn't change when WSJT-X retunes"):
 
 - **RSPdx antenna picker** in Settings (Antenna A / B / C). The RSPdx
   has three RF inputs and v0.99.x defaulted to Antenna A. If your
