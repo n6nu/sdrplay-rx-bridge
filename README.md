@@ -17,11 +17,24 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest beta — v0.99.6
+## Latest beta — v0.99.7
 
-Download: **[sdrplay-rx-bridge-0.99.6-setup.exe](sdrplay-rx-bridge-0.99.6-setup.exe)**
+Download: **[sdrplay-rx-bridge-0.99.7-setup.exe](sdrplay-rx-bridge-0.99.7-setup.exe)**
 
-What's new in v0.99.6 — architectural refactor, no functional change.
+What's new in v0.99.7 — **Low-IF mode is now the default**, fixing the
+visible DC spike at the dial frequency. Previously the bridge ran in
+zero-IF mode which puts LO leakage and ADC offset right at the wanted
+signal. v0.99.7 defaults to **`sdrplay_api_IF_1_620`** which moves
+those artifacts to −1.62 MHz from the signal — well outside the
+1.536 MHz analog bandwidth and the 96 kHz QMAP window.
+
+Settings → new **"IF mode"** combo lets you flip between Low-IF
+(recommended) and Zero-IF (diagnostic). Existing installs upgrade
+to Low-IF automatically — DC spike just disappears. The bridge's
+DSP pipeline is unaffected (SDRplay handles the digital
+downconversion internally).
+
+What landed in v0.99.6 — architectural refactor, no functional change.
 GUI classes (`RxMainWindow` + `RxSettingsDialog`) now live in
 `bridge-core/` and are shared with the HackRF and RTL-SDR sibling
 apps. Future GUI features land once and propagate to all three.

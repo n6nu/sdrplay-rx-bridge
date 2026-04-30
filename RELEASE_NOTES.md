@@ -1,5 +1,32 @@
 # SDRplay RX Bridge — Release Notes
 
+## v0.99.7 — beta (2026-04-30)
+
+- **Low-IF mode is now the default** — fixes the visible DC spike at
+  the dial frequency that testers reported (tester request).
+  Previously the bridge ran in zero-IF (`sdrplay_api_IF_Zero`) which
+  puts LO leakage, ADC offset, and 1/f noise right at the wanted
+  signal. v0.99.7 defaults to **`sdrplay_api_IF_1_620`** which moves
+  those artifacts to −1.62 MHz from the signal — well outside the
+  1.536 MHz analog bandwidth and the 96 kHz QMAP window.
+- Settings → new **"IF mode"** combo with two options:
+  - **Low-IF 1620 kHz (recommended — DC out of band)** ← new default
+  - **Zero-IF (DC at signal — has spike, diagnostic only)** ← previous
+    behavior, still selectable for diagnostic comparison
+- The SDRplay handles digital downconversion internally — output
+  samples still arrive at the dial frequency at baseband regardless
+  of IF mode, so the bridge's DSP pipeline (`SsbDemodulator`,
+  `LinradServer`, `(-1)^n·conj()` transform) is unaffected.
+  Bandwidth stays at 1.536 MHz.
+- INI key: `sdrplay/if_khz` (0 = Zero-IF, 1620 = Low-IF). Existing
+  installs upgrade to Low-IF on first launch — the DC spike just
+  disappears.
+
+Note: the `IqBalancer`'s blind α/sin(φ) estimator was tuned for
+zero-IF signal stats; if you see I/Q balance correction behave
+differently in low-IF mode, toggle it off in Settings and report
+the comparison.
+
 ## v0.99.6 — beta (2026-04-30)
 
 Architectural refactor — Phase 1b GUI consolidation. No functional
