@@ -17,15 +17,22 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest beta — v0.99.0
+## Latest beta — v0.99.1
 
-Download: **[sdrplay-rx-bridge-0.99.0-setup.exe](sdrplay-rx-bridge-0.99.0-setup.exe)**
+Download: **[sdrplay-rx-bridge-0.99.1-setup.exe](sdrplay-rx-bridge-0.99.1-setup.exe)**
 
-First public beta. Verified scope: **RSPduo in single-tuner mode on
-Tuner A**. Other RSP* models (RSP1A / RSP1B / RSPdx / RSPdx-R2 / RSP2)
-share the code path and should boot, with RSPduo-only features (RF /
-DAB notches, Tuner B bias-T) becoming no-ops on the others. Reports
-from non-RSPduo testers especially welcome.
+What's new in v0.99.1: **transverter offset** (tester request — 10368 MHz
+operation through a 144 MHz IF transverter). New Settings → "Transverter
+offset" field (signed MHz). The SDR is tuned to *(WSJT-X dial + offset)*
+while the GUI, WSJT-X, QMAP, and the LinradServer header all keep
+showing the operating dial. Example: dial 10368 MHz, offset −10224 MHz,
+SDR actually tunes to 144 MHz. CLI flag `--transverter-offset <MHz>`.
+
+Verified scope: **RSPduo in single-tuner mode on Tuner A**. Other RSP*
+models (RSP1A / RSP1B / RSPdx / RSPdx-R2 / RSP2) share the code path
+and should boot, with RSPduo-only features (RF / DAB notches, Tuner B
+bias-T) becoming no-ops on the others. Reports from non-RSPduo testers
+especially welcome.
 
 Full per-version notes, system requirements and known limitations are
 in [`RELEASE_NOTES.md`](RELEASE_NOTES.md).

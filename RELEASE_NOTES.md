@@ -1,5 +1,20 @@
 # SDRplay RX Bridge — Release Notes
 
+## v0.99.1 — beta (2026-04-29)
+
+- **Transverter offset** (tester request — 10368 MHz operation through a
+  144 MHz IF transverter). New Settings → "Transverter offset" field
+  (signed MHz, kHz precision). The SDR is tuned to *(dial + offset)*
+  while the GUI, WSJT-X, QMAP, and the LinradServer header all keep
+  showing the operating dial. Example: dial 10368 MHz, offset
+  −10224 MHz, SDR actually tunes to 144 MHz. The main-window frequency
+  display gains a small "IF tune: 144.000000 MHz (offset −10224.000000 MHz)"
+  line below the big dial readout whenever the offset is non-zero, so
+  the operator can confirm at a glance the SDR is tuned where they
+  expect.
+- Persisted INI key: `radio/transverter_offset_hz` (int64, Hz).
+- New CLI flag: `--transverter-offset <MHz>` (signed double).
+
 ## v0.99.0 — first beta (2026-04-29)
 
 ### Initial scope
