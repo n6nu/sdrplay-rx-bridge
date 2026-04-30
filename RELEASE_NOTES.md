@@ -58,11 +58,12 @@ when WSJT-X retunes").
 
 ### Initial scope
 
-| RSP model | Status in v0.99.x |
+| RSP model | Status |
 |---|---|
 | **RSPduo** (single-tuner, Tuner A) | **Working** — verified on N6NU's bench. Full feature parity (RF / DAB notches, Tuner B bias-T toggles wired). |
-| **RSPdx** | **Working** — beta-tester verified at 10 GHz EME via 144 MHz IF transverter. Streams, decodes; antenna defaults to Antenna A; bias-T / RF notch / DAB notch / HDR mode toggles are not yet wired (no-ops in v0.99.x — coming in a follow-up). |
-| RSP1A / RSP1B / RSPdx-R2 / RSP2 / RSP1 | Should boot and stream — share the same code path. Untested at first ship. Reports welcome. Per-model bias-T / notch / antenna toggles will land as testers report on each. |
+| **RSPdx** | **Working** — beta-tester verified at 10 GHz EME via 144 MHz IF transverter (v0.99.1+) and antenna A/B/C selector verified (v0.99.3, 2026-04-30). Bias-T, RF notch, DAB notch toggles all wired in v0.99.3 but not yet exercised by a tester. HDR mode is not yet exposed (deferred follow-up). |
+| **RSPdx-R2** | Untested. Same code path as RSPdx; antenna picker, bias-T, and notches go through the same Update reasons. |
+| RSP1A / RSP1B / RSP2 / RSP1 | Should boot and stream. v0.99.3 wires per-model bias-T and notches (RSP1 has none). Untested in actual operation; reports welcome. |
 
 Dual-tuner / master-slave / diversity RX modes on the RSPduo are out of
 scope for v0.99.x — single-tuner Tuner A only.

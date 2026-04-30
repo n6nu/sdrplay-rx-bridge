@@ -53,13 +53,14 @@ while the GUI, WSJT-X, QMAP, and the LinradServer header all keep
 showing the operating dial. Example: dial 10368 MHz, offset −10224 MHz,
 SDR actually tunes to 144 MHz. CLI flag `--transverter-offset <MHz>`.
 
-Per-model status in v0.99.x:
+Per-model status:
 
 | RSP model | Status |
 |---|---|
 | **RSPduo** (single-tuner, Tuner A) | **Working** — verified on N6NU's bench. Full feature parity. |
-| **RSPdx** | **Working** — beta-tester verified at 10 GHz EME via 144 MHz IF transverter. Antenna defaults to A; bias-T / notch / HDR toggles not yet wired. |
-| RSP1A / RSP1B / RSPdx-R2 / RSP2 / RSP1 | Should boot and stream — same code path. Untested at first ship. Reports welcome. |
+| **RSPdx** | **Working** — beta-tester verified at 10 GHz EME via 144 MHz IF transverter (v0.99.1+) and Antenna A/B/C selector verified in v0.99.3. Bias-T / RF notch / DAB notch toggles are wired but not yet exercised. HDR mode is a deferred follow-up. |
+| **RSPdx-R2** | Untested — shares the RSPdx code path. |
+| RSP1A / RSP1B / RSP2 / RSP1 | Should boot and stream. v0.99.3 wires per-model bias-T and notches (RSP1 has none). Untested in actual operation; reports welcome. |
 
 Full per-version notes, system requirements and known limitations are
 in [`RELEASE_NOTES.md`](RELEASE_NOTES.md).
