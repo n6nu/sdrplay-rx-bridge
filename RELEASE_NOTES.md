@@ -1,5 +1,28 @@
 # SDRplay RX Bridge — Release Notes
 
+## v0.99.6 — beta (2026-04-30)
+
+Architectural refactor — Phase 1b GUI consolidation. No functional
+change for the user; the SDRplay-side feature set (overload indicator,
+manual SDR freq override, transverter offset, streaming-stats log,
+bold red IF readout, freq display sourced from device cfg) is identical
+to v0.99.5. Behind the scenes:
+
+- `RxMainWindow` and `RxSettingsDialog` now live in `bridge-core/` and
+  are shared with the HackRF-RX-Bridge and RTL-SDR-RX-Bridge sibling
+  apps. Future GUI features land once and propagate to all three.
+- All radios derive from a new `IqDevice` abstract interface in
+  `bridge-core/IqDevice.h`. Capability differences (overload events,
+  multi-antenna selection) are surfaced through the interface.
+- SDRplay-specific Settings rows (gRdB, LNA state, AGC, bias-T,
+  notches, antenna picker, DC/IQ correction, PPM) now live in a
+  self-contained `SdrplayGainPanel` widget that the shared dialog
+  embeds.
+
+The HackRF-RX-Bridge and RTL-SDR-RX-Bridge sibling apps gain feature
+parity in their respective v0.99.2 releases (transverter offset,
+manual SDR freq override, streaming-stats log).
+
 ## v0.99.5 — beta (2026-04-30)
 
 Bug fixes against v0.99.4 reported by beta tester.

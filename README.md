@@ -17,11 +17,18 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest beta — v0.99.5
+## Latest beta — v0.99.6
 
-Download: **[sdrplay-rx-bridge-0.99.5-setup.exe](sdrplay-rx-bridge-0.99.5-setup.exe)**
+Download: **[sdrplay-rx-bridge-0.99.6-setup.exe](sdrplay-rx-bridge-0.99.6-setup.exe)**
 
-What's fixed in v0.99.5 — two bugs reported against v0.99.4:
+What's new in v0.99.6 — architectural refactor, no functional change.
+GUI classes (`RxMainWindow` + `RxSettingsDialog`) now live in
+`bridge-core/` and are shared with the HackRF and RTL-SDR sibling
+apps. Future GUI features land once and propagate to all three.
+SDRplay-specific Settings rows live in a new `SdrplayGainPanel`
+widget the shared dialog embeds. Same SDRplay feature set as v0.99.5.
+
+What was fixed in v0.99.5 — two bugs reported against v0.99.4:
 
 - **Frequency display blank at startup with manual override on.** The
   GUI now reads the bridge's actual operating freq (set at startup
