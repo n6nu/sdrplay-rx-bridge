@@ -28,11 +28,13 @@ while the GUI, WSJT-X, QMAP, and the LinradServer header all keep
 showing the operating dial. Example: dial 10368 MHz, offset −10224 MHz,
 SDR actually tunes to 144 MHz. CLI flag `--transverter-offset <MHz>`.
 
-Verified scope: **RSPduo in single-tuner mode on Tuner A**. Other RSP*
-models (RSP1A / RSP1B / RSPdx / RSPdx-R2 / RSP2) share the code path
-and should boot, with RSPduo-only features (RF / DAB notches, Tuner B
-bias-T) becoming no-ops on the others. Reports from non-RSPduo testers
-especially welcome.
+Per-model status in v0.99.x:
+
+| RSP model | Status |
+|---|---|
+| **RSPduo** (single-tuner, Tuner A) | **Working** — verified on N6NU's bench. Full feature parity. |
+| **RSPdx** | **Working** — beta-tester verified at 10 GHz EME via 144 MHz IF transverter. Antenna defaults to A; bias-T / notch / HDR toggles not yet wired. |
+| RSP1A / RSP1B / RSPdx-R2 / RSP2 / RSP1 | Should boot and stream — same code path. Untested at first ship. Reports welcome. |
 
 Full per-version notes, system requirements and known limitations are
 in [`RELEASE_NOTES.md`](RELEASE_NOTES.md).
