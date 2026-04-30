@@ -17,11 +17,23 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest beta — v0.99.4
+## Latest beta — v0.99.5
 
-Download: **[sdrplay-rx-bridge-0.99.4-setup.exe](sdrplay-rx-bridge-0.99.4-setup.exe)**
+Download: **[sdrplay-rx-bridge-0.99.5-setup.exe](sdrplay-rx-bridge-0.99.5-setup.exe)**
 
-What's new in v0.99.4 — two tester requests:
+What's fixed in v0.99.5 — two bugs reported against v0.99.4:
+
+- **Frequency display blank at startup with manual override on.** The
+  GUI now reads the bridge's actual operating freq (set at startup
+  from either the manual-override INI keys or the last persisted
+  WSJT-X dial), so the readout is populated from the moment the
+  bridge launches in either tracking or override mode.
+- **Manual override could be silently undone by a WSJT-X dial change.**
+  The GUI was retuning the SDR in parallel to the main event loop and
+  not honouring the override flag. Removed — main event loop now owns
+  SDR retuning end-to-end. Override mode now actually stays put.
+
+What's still in from v0.99.4 — two tester requests:
 
 - **Front-end overload indicator.** A red `⚠ FRONT-END OVERLOAD` banner
   appears under the dial display whenever the SDRplay API reports a

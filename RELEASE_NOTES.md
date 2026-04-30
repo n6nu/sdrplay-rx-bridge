@@ -1,5 +1,26 @@
 # SDRplay RX Bridge — Release Notes
 
+## v0.99.5 — beta (2026-04-30)
+
+Bug fixes against v0.99.4 reported by beta tester.
+
+- **Frequency display blank at startup with manual override on.** The
+  GUI freq readout sourced its value from `WsjtxFreqSource::frequencyHz()`,
+  which is empty until WSJT-X has broadcast at least one status message.
+  In manual override mode (where the bridge ignores WSJT-X anyway), the
+  display would never populate. Fixed: the display now sources from
+  `sdrplay->config().freq_hz` — the bridge's actual operating freq —
+  which is set at startup from either the manual-override INI keys or
+  the last persisted WSJT-X dial. Tracking mode and override mode both
+  show a sensible value from the moment the bridge launches.
+- **Manual override could be silently undone by a WSJT-X dial change.**
+  `RxMainWindow::onWsjtxFreq` was calling `sdrplay->setFrequency()`
+  directly in parallel to the main.cpp WSJT-X freq lambda. The lambda
+  honours the override flag; the GUI handler did not. With override on,
+  any WSJT-X dial broadcast would retune the SDR off the manual freq.
+  Fixed: removed the duplicate retune from the GUI handler — main.cpp
+  now owns SDR retuning end-to-end.
+
 ## v0.99.4 — beta (2026-04-30)
 
 Two tester requests landed in this build.
