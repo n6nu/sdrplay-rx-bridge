@@ -1,5 +1,20 @@
 # SDRplay RX Bridge — Release Notes
 
+## v0.99.11 — beta (2026-05-01)
+
+**Spectrum mirroring fix in Low-IF mode.** v0.99.10's Low-IF received
+the signal but the spectrum came out mirrored around the dial — a
+sig-gen 10 kHz above dial appeared 10 kHz *below* dial in QMAP. Root
+cause: the SDRplay outputs IQ with Q inverted in IF_0_450 mode (a
+known chip-design quirk). Fix: conjugate Q (negate it) before the NCO
+in `SdrplayDevice::onStream` when low-IF is active. Standard
+"above dial = above baseband" orientation restored.
+
+Verification: with sig-gen at 144.400 and dial sweeping
+144.380 / 144.390 / 144.400, the carrier should now appear at the
+expected position (above dial when dial < 144.400; right at dial
+when they match). DC artifact stays at −450 kHz from signal.
+
 ## v0.99.10 — beta (2026-05-01)
 
 **Bug fix against v0.99.9.** Switching to Low-IF mode at runtime via

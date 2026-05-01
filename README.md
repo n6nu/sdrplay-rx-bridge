@@ -17,11 +17,31 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest beta — v0.99.10
+## Latest beta — v0.99.11
 
-Download: **[sdrplay-rx-bridge-0.99.10-setup.exe](sdrplay-rx-bridge-0.99.10-setup.exe)**
+Download: **[sdrplay-rx-bridge-0.99.11-setup.exe](sdrplay-rx-bridge-0.99.11-setup.exe)**
 
-**Bug fix against v0.99.9.** When you flipped Low-IF on at runtime via
+**Spectrum-mirroring fix in Low-IF.** v0.99.10's Low-IF received the
+signal at the right amplitude but the spectrum came out *mirrored*
+around the dial — sweeping the dial across a fixed sig-gen carrier
+showed the apparent frequency moving in the *opposite* direction
+from the real offset (apparent_offset = −real_offset). Root cause:
+the SDRplay outputs IQ with Q inverted in IF_0_450 mode (chip-design
+quirk known on the Mirics MSi001). Fix: conjugate Q before the NCO
+in `SdrplayDevice::onStream` when low-IF is active. Standard "above
+dial = above baseband" orientation restored.
+
+**Test:** with sig-gen at 144.400 fixed and WSJT-X dial sweeping:
+- Dial 144.400: carrier at QMAP centre.
+- Dial 144.390: carrier 10 kHz **above** dial centre (was 10 kHz below in v0.99.10).
+- Dial 144.380: carrier 20 kHz **above** dial centre.
+- DC artifact: still off-screen at dial − 450 kHz.
+
+What landed in v0.99.10 — fixed runtime IF-mode switching with
+proper Uninit + re-init.
+
+What landed in v0.99.9 — Low-IF 450 kHz with NCO downconverter
+(opt-in via Settings → "IF mode"). When you flipped Low-IF on at runtime via
 Settings, the chip's IF wasn't actually changing — only the bridge's
 NCO came online while the SDRplay stayed in its old IF mode. Net
 effect: NCO rotated already-baseband samples by −450 kHz, pushing
