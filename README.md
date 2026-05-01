@@ -17,11 +17,27 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest beta — v0.99.11
+## Latest beta — v0.99.12
 
-Download: **[sdrplay-rx-bridge-0.99.11-setup.exe](sdrplay-rx-bridge-0.99.11-setup.exe)**
+Download: **[sdrplay-rx-bridge-0.99.12-setup.exe](sdrplay-rx-bridge-0.99.12-setup.exe)**
 
-**Spectrum-mirroring fix in Low-IF.** v0.99.10's Low-IF received the
+**NCO sign fix.** v0.99.11's Q-conjugation was a no-op — the
+LinradServer's mandatory `(-1)^n·conj()` transform (required by
+QMAP for its FFT-direction quirk) silently undid it. The actual
+fix was the NCO direction. Empirically the SDRplay puts the wanted
+signal at −450 kHz (not +450 kHz) in IF_0_450 output IQ; combined
+with the LinradServer's conjugation the right NCO sign is +,
+not −.
+
+**Test:** with sig-gen at 144.400 fixed:
+- Dial 144.380 → carrier should appear at QMAP +20 kHz from centre
+  (sig-gen above dial → above centre).
+- Dial 144.410 → carrier at −10 kHz from centre.
+- Dial 144.400 → carrier at QMAP centre.
+- DC artifact: at −450 kHz, off-screen.
+
+What landed in v0.99.11 — Q conjugation attempt (turned out to be
+a no-op due to LinradServer transform). v0.99.10's Low-IF received the
 signal at the right amplitude but the spectrum came out *mirrored*
 around the dial — sweeping the dial across a fixed sig-gen carrier
 showed the apparent frequency moving in the *opposite* direction

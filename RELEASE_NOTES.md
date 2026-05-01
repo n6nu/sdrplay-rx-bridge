@@ -1,5 +1,25 @@
 # SDRplay RX Bridge — Release Notes
 
+## v0.99.12 — beta (2026-05-01)
+
+**NCO sign fix.** v0.99.11's Q-conjugation didn't actually un-mirror
+the Low-IF spectrum — the `LinradServer`'s `(-1)^n·conj()` transform
+(required by QMAP for its FFT-direction quirk) silently undid it,
+making my v0.99.11 fix a no-op. Tester confirmed: same mirroring
+pattern as v0.99.10 (`apparent_offset = −real_offset`).
+
+v0.99.12 reverts the conjugation and flips the **NCO sign** instead.
+Empirically the SDRplay puts the wanted signal at −450 kHz (not
++450 kHz) in IF_0_450 output IQ; combined with the LinradServer's
+mandatory conjugation the right NCO direction is `+2π·450/fs`,
+not `−2π·450/fs`.
+
+**Test:** with sig-gen at 144.400 fixed:
+- Dial 144.380 → carrier should appear at QMAP +20 kHz from centre
+  (sig-gen is 20 kHz above dial → above centre).
+- Dial 144.410 → carrier at −10 kHz from centre.
+- Dial 144.400 → carrier at QMAP centre, DC artifact at −450 kHz off-screen.
+
 ## v0.99.11 — beta (2026-05-01)
 
 **Spectrum mirroring fix in Low-IF mode.** v0.99.10's Low-IF received
