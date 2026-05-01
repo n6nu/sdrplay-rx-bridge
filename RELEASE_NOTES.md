@@ -1,5 +1,22 @@
 # SDRplay RX Bridge — Release Notes
 
+## v0.99.13 — beta (2026-05-01)
+
+**Low-IF is now the default** — DC spike fix shipped. Tester
+verified v0.99.12 Low-IF on the bench: tuning correct, spectrum
+orientation correct, no DC spike on the wanted signal. Promoting
+to default for fresh installs.
+
+- Fresh installs (no `sdrplay/if_khz` INI key) come up in Low-IF
+  450 kHz mode automatically. DC artifact lives at −450 kHz from
+  the wanted signal — well outside the 96 kHz QMAP window.
+- Existing INIs keep whatever value they have. Operators who set
+  `if_khz=0` explicitly (or who installed v0.99.10/.11/.12 and
+  never opened Settings) stay in Zero-IF until they choose
+  otherwise via Settings → "IF mode".
+- The Settings combo now lists Low-IF 450 kHz as the default and
+  Zero-IF as a diagnostic option.
+
 ## v0.99.12 — beta (2026-05-01)
 
 **NCO sign fix.** v0.99.11's Q-conjugation didn't actually un-mirror

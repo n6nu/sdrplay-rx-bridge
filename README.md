@@ -17,11 +17,29 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest beta — v0.99.12
+## Latest beta — v0.99.13
 
-Download: **[sdrplay-rx-bridge-0.99.12-setup.exe](sdrplay-rx-bridge-0.99.12-setup.exe)**
+Download: **[sdrplay-rx-bridge-0.99.13-setup.exe](sdrplay-rx-bridge-0.99.13-setup.exe)**
 
-**NCO sign fix.** v0.99.11's Q-conjugation was a no-op — the
+**Low-IF is now the default — DC spike fix shipped to all installs.**
+Tester verified v0.99.12 Low-IF on the bench (sig-gen at 144.400,
+sweeping WSJT-X dial): tuning correct, spectrum orientation correct,
+DC spike no longer on the wanted signal. Promoted to default for
+fresh installs in v0.99.13.
+
+- Fresh installs come up in Low-IF 450 kHz mode automatically.
+  DC artifact lives at −450 kHz from the wanted signal — well
+  outside the 96 kHz QMAP window.
+- Existing INIs keep their stored value. Operators who landed in
+  Zero-IF on v0.99.10/.11/.12 stay there until they switch via
+  Settings → "IF mode".
+- The Settings combo lists Low-IF 450 kHz as the default and Zero-IF
+  as a diagnostic option.
+
+What landed in v0.99.12 — flipped NCO sign for Low-IF (the actual
+fix that brought the spectrum into correct orientation). v0.99.7
+through v0.99.11 were a saga of fix-attempts; v0.99.12 was the one
+that worked end-to-end. v0.99.11's Q-conjugation was a no-op — the
 LinradServer's mandatory `(-1)^n·conj()` transform (required by
 QMAP for its FFT-direction quirk) silently undid it. The actual
 fix was the NCO direction. Empirically the SDRplay puts the wanted
