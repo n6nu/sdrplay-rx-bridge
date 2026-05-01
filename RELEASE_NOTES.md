@@ -1,5 +1,24 @@
 # SDRplay RX Bridge — Release Notes
 
+## v0.99.10 — beta (2026-05-01)
+
+**Bug fix against v0.99.9.** Switching to Low-IF mode at runtime via
+Settings didn't actually change the SDRplay's IF. The new `if_khz`
+value was stored in the Config and the bridge's NCO came online —
+but the chip stayed in its previous IF mode. Net effect: NCO rotated
+already-baseband samples by −450 kHz, pushing the wanted signal off
+to −450 kHz (out of band). Symptom: signal disappears in Low-IF.
+
+Fix: when `if_khz` (or `sample_rate`) changes via `configure()`, the
+device class now does a full Uninit → re-apply params → Init cycle.
+The chip's analog filter / LO offset / decimation factor / bandwidth
+are all "structural" — they can't be hot-swapped via the API's
+update reasons; the streaming pipeline has to be torn down and
+rebuilt. Cold start (bridge launches with `if_khz=450` already in
+INI) was already working — only the live Settings change was broken.
+
+Default still Zero-IF until verified on a real signal.
+
 ## v0.99.9 — beta (2026-05-01)
 
 **Low-IF mode is back, this time with the matching DSP.** v0.99.7

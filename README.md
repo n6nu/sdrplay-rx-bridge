@@ -17,13 +17,30 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest beta — v0.99.9
+## Latest beta — v0.99.10
 
-Download: **[sdrplay-rx-bridge-0.99.9-setup.exe](sdrplay-rx-bridge-0.99.9-setup.exe)**
+Download: **[sdrplay-rx-bridge-0.99.10-setup.exe](sdrplay-rx-bridge-0.99.10-setup.exe)**
 
-**Low-IF mode is back, this time with the matching DSP.** v0.99.7
-shipped half a fix; v0.99.9 ships the rest. Default is still Zero-IF
-(no behavioural change unless you opt in via Settings → "IF mode").
+**Bug fix against v0.99.9.** When you flipped Low-IF on at runtime via
+Settings, the chip's IF wasn't actually changing — only the bridge's
+NCO came online while the SDRplay stayed in its old IF mode. Net
+effect: NCO rotated already-baseband samples by −450 kHz, pushing
+the wanted signal off-screen. v0.99.10 now does a proper
+Uninit → re-apply params → Init cycle when `if_khz` (or sample rate)
+changes — those are "structural" SDRplay settings that can't be
+hot-swapped.
+
+Please retry on your sig-gen at 144.400 with WSJT-X dial at 144.400:
+- Open Settings → IF mode → "Low-IF 450 kHz" → Apply.
+- The bridge's `--console` log should print
+  `[SDRplay] IF mode / sample rate changed — uninit + re-init`.
+- QMAP wideband: expected to show clean carrier at dial centre,
+  DC spike off-screen at dial − 450 kHz.
+
+Default still Zero-IF until verified.
+
+What landed in v0.99.9 — Low-IF 450 kHz with NCO downconverter
+(opt-in), but the runtime-switch path was broken.
 
 When you select "Low-IF 450 kHz" in Settings:
 - The SDRplay tunes its analog LO 450 kHz below the dial.
