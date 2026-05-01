@@ -17,22 +17,27 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest beta — v0.99.7
+## Latest beta — v0.99.8
 
-Download: **[sdrplay-rx-bridge-0.99.7-setup.exe](sdrplay-rx-bridge-0.99.7-setup.exe)**
+Download: **[sdrplay-rx-bridge-0.99.8-setup.exe](sdrplay-rx-bridge-0.99.8-setup.exe)**
 
-What's new in v0.99.7 — **Low-IF mode is now the default**, fixing the
-visible DC spike at the dial frequency. Previously the bridge ran in
-zero-IF mode which puts LO leakage and ADC offset right at the wanted
-signal. v0.99.7 defaults to **`sdrplay_api_IF_1_620`** which moves
-those artifacts to −1.62 MHz from the signal — well outside the
-1.536 MHz analog bandwidth and the 96 kHz QMAP window.
+**Hot fix** — reverts v0.99.7's Low-IF-by-default change. v0.99.7
+was based on the wrong assumption about how SDRplay's Low-IF mode
+works: in `IF_1_620` the SDRplay outputs IQ centered at the IF
+(1.62 MHz), not at the dial frequency, so the wanted signal sits at
++1.62 MHz in the output stream — outside the 96 kHz QMAP window
+and outside the SSB demod's audio passband. The bridge needs an
+NCO downconverter in its DSP pipeline to use Low-IF properly, and
+that wasn't shipped in v0.99.7. Symptoms in v0.99.7: low audio
+levels, no signal in QMAP, DC spike still visible.
 
-Settings → new **"IF mode"** combo lets you flip between Low-IF
-(recommended) and Zero-IF (diagnostic). Existing installs upgrade
-to Low-IF automatically — DC spike just disappears. The bridge's
-DSP pipeline is unaffected (SDRplay handles the digital
-downconversion internally).
+v0.99.8 forces Zero-IF on launch. Tester INIs from v0.99.7 with
+`sdrplay/if_khz = 1620` are silently corrected back to 0 on first
+run; the IF mode dropdown is greyed out at "Zero-IF" until a future
+version implements the NCO downconverter properly.
+
+The DC-spike fix is back on the BACKLOG — it's still the right idea,
+just needs more DSP work than I initially shipped.
 
 What landed in v0.99.6 — architectural refactor, no functional change.
 GUI classes (`RxMainWindow` + `RxSettingsDialog`) now live in

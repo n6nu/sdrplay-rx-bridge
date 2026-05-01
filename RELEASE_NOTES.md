@@ -1,5 +1,25 @@
 # SDRplay RX Bridge — Release Notes
 
+## v0.99.8 — beta (2026-04-30)
+
+**Hot fix**: revert v0.99.7's Low-IF-by-default change. Tester report
+showed RX broken in Low-IF mode (low audio levels, no signal in QMAP
+window). Root cause: in `IF_1_620` mode the SDRplay outputs IQ
+*centered at the 1.62 MHz IF* (not at the dial frequency) — the
+wanted signal is at +1.62 MHz from the output IQ center, outside our
+96 kHz QMAP window and outside the SSB demod's audio passband. v0.99.7
+shipped without the matching DSP change (a complex NCO mixer to shift
+the IF signal back to baseband), so the wanted signal effectively
+disappeared.
+
+v0.99.8 forces Zero-IF on every launch. The "IF mode" Settings combo
+is greyed out — only Zero-IF is selectable until the NCO downconverter
+is wired into the bridge DSP pipeline. Tester INIs from v0.99.7 with
+`sdrplay/if_khz = 1620` will be silently corrected to 0 on first run.
+
+The DC-spike fix is back on the BACKLOG — pending a proper Low-IF
+implementation with the NCO mixer (estimated ~4-6 hours of DSP work).
+
 ## v0.99.7 — beta (2026-04-30)
 
 - **Low-IF mode is now the default** — fixes the visible DC spike at
