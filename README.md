@@ -17,9 +17,26 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest release — v1.0.0 (first stable)
+## Latest release — v1.0.1
 
-Download: **[sdrplay-rx-bridge-1.0.0-setup.exe](sdrplay-rx-bridge-1.0.0-setup.exe)**
+Download: **[sdrplay-rx-bridge-1.0.1-setup.exe](sdrplay-rx-bridge-1.0.1-setup.exe)**
+
+**Audio path now runs at full 14-bit precision** to match the QMAP path
+that v1.0.0 already widened. v1.0.0 routed int16 only to `LinradServer`
+(the QMAP wire); `SsbDemodulator` and `FftEngine` were still fed the
+int8 view, capping the WSJT-X audio path and the waterfall display at
+the same 8-bit dynamic range we shipped through 0.99.x.
+
+- `SsbDemodulator` gains an `int16` overload — WSJT-X RX audio now
+  inherits the SDRplay's full 14-bit ADC range. In practice this
+  matters when a strong adjacent carrier was eating into AGC
+  headroom.
+- `FftEngine` gains an `int16` overload — main-window waterfall
+  contrast on weak signals improves accordingly.
+- HackRF and RTL-SDR sibling apps are unchanged (their HW is int8).
+- Drop-in upgrade from v1.0.0; no INI changes, no migration.
+
+### v1.0.0 — first stable
 
 **Exiting beta.** Two cumulative changes since the last `0.99.x`:
 
@@ -28,10 +45,8 @@ Download: **[sdrplay-rx-bridge-1.0.0-setup.exe](sdrplay-rx-bridge-1.0.0-setup.ex
   before any DSP touched it — losing 36 dB of dynamic range on the way
   to QMAP. v1.0.0 keeps the int16 stream intact through `LinradServer`:
   the wire format to QMAP was already int16, but until now we'd thrown
-  away the bottom 8 bits of every sample on entry. Audio (`SsbDemodulator`)
-  and waterfall (`FftEngine`) still take int8 — there's no benefit there.
-  Net effect: weak-signal QMAP wideband decode rates should improve in
-  marginal-signal conditions where ADC dynamic range matters.
+  away the bottom 8 bits of every sample on entry. (v1.0.1 extends
+  this to the audio path as well.)
 - **First stable release.** The Phase 1b dedupe is settled, the Low-IF
   DC-spike fix is verified, the per-radio gain panels are clean, three
   RSP* models tested. The `0.99.x` beta line ends here; future

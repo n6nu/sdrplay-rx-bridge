@@ -1,5 +1,27 @@
 # SDRplay RX Bridge — Release Notes
 
+## v1.0.1 — 14-bit audio + waterfall (2026-05-01)
+
+**Audio path now runs at full 14-bit precision** to match the
+QMAP path that v1.0.0 already widened. v1.0.0 only routed int16
+into `LinradServer`; `SsbDemodulator` and `FftEngine` were still
+fed the int8 view of the stream, capping the WSJT-X audio path
+and the waterfall display at the same 8-bit dynamic range we
+shipped through the entire 0.99.x beta.
+
+- `SsbDemodulator` gains `demodulate(const int16_t*, size_t n_iq, …)`
+  overload. Existing int8 path retained unchanged for HackRF /
+  RTL-SDR — bit-for-bit identical.
+- `FftEngine` gains `pushIq(const int16_t*, size_t)` overload.
+- SDRplay's RX callback now feeds the int16 buffer into all three
+  consumers (demod, FFT, LinradServer). int8 stays only for the
+  per-window peak / dBFS stats line so the existing log format
+  stays comparable to earlier versions.
+- HackRF and RTL-SDR sibling apps unchanged — their native HW
+  output is int8, so up-converting before the demod buys nothing.
+
+No INI / migration changes; v1.0.1 is a drop-in upgrade from v1.0.0.
+
 ## v1.0.0 — first stable (2026-05-01)
 
 **Exiting beta.** Two cumulative changes since the last beta:
