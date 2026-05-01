@@ -1,5 +1,34 @@
 # SDRplay RX Bridge — Release Notes
 
+## v1.0.0 — first stable (2026-05-01)
+
+**Exiting beta.** Two cumulative changes since the last beta:
+
+- **14-bit IQ end-to-end through the QMAP path.** The bridge previously
+  down-converted the SDRplay's 14-bit ADC to int8 in `SdrplayDevice::onStream`
+  before any bridge-core DSP touched it — losing 36 dB of dynamic range
+  on the way to QMAP. v1.0.0 keeps the int16 IQ stream intact through
+  `LinradServer` end-to-end:
+  - `LinradServer` gains `pushIq(const int16_t*, size_t)` overload.
+  - Internal IQ queue switches to int16. int8 callers (HackRF / RTL-SDR)
+    are upcast with `<<8` on push — bit-for-bit identical to pre-1.0
+    behaviour for those radios.
+  - SDRplay's RX callback now provides both an int8 and int16 view of
+    each sample window. Audio (`SsbDemodulator`) and waterfall
+    (`FftEngine`) still take int8 — there's no benefit there. QMAP
+    (`LinradServer` UDP) takes int16.
+- **First stable release.** The Phase 1b dedupe is settled, the
+  Low-IF DC-spike fix is verified on the bench, the per-radio gain
+  panels are clean, and three different RSP* models have been tested.
+  The `0.99.x` beta line ends here; future development opens a `1.x`
+  series. No INI / migration changes; v1.0.0 is a drop-in upgrade
+  from v0.99.13.
+
+The narrowband audio path (FT8/FT4 via VB-Cable) is unchanged. The win
+shows up on QMAP wideband decode in marginal-signal conditions, where
+the difference between a 50 dB ADC noise floor (8-bit) and a 14-bit
+ADC's 86 dB-ish noise floor matters.
+
 ## v0.99.13 — beta (2026-05-01)
 
 **Low-IF is now the default** — DC spike fix shipped. Tester

@@ -17,11 +17,30 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest beta — v0.99.13
+## Latest release — v1.0.0 (first stable)
 
-Download: **[sdrplay-rx-bridge-0.99.13-setup.exe](sdrplay-rx-bridge-0.99.13-setup.exe)**
+Download: **[sdrplay-rx-bridge-1.0.0-setup.exe](sdrplay-rx-bridge-1.0.0-setup.exe)**
 
-**Low-IF is now the default — DC spike fix shipped to all installs.**
+**Exiting beta.** Two cumulative changes since the last `0.99.x`:
+
+- **14-bit IQ end-to-end through the QMAP path.** The bridge previously
+  down-converted the SDRplay's 14-bit ADC to int8 in `SdrplayDevice`
+  before any DSP touched it — losing 36 dB of dynamic range on the way
+  to QMAP. v1.0.0 keeps the int16 stream intact through `LinradServer`:
+  the wire format to QMAP was already int16, but until now we'd thrown
+  away the bottom 8 bits of every sample on entry. Audio (`SsbDemodulator`)
+  and waterfall (`FftEngine`) still take int8 — there's no benefit there.
+  Net effect: weak-signal QMAP wideband decode rates should improve in
+  marginal-signal conditions where ADC dynamic range matters.
+- **First stable release.** The Phase 1b dedupe is settled, the Low-IF
+  DC-spike fix is verified, the per-radio gain panels are clean, three
+  RSP* models tested. The `0.99.x` beta line ends here; future
+  development opens a `1.x` series. v1.0.0 is a drop-in upgrade — no
+  INI changes, no migration steps.
+
+What landed in v0.99.13 — Low-IF 450 kHz promoted to default.
+
+(Earlier versions: see `RELEASE_NOTES.md`.)
 Tester verified v0.99.12 Low-IF on the bench (sig-gen at 144.400,
 sweeping WSJT-X dial): tuning correct, spectrum orientation correct,
 DC spike no longer on the wanted signal. Promoted to default for
