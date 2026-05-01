@@ -17,11 +17,36 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest beta — v0.99.8
+## Latest beta — v0.99.9
 
-Download: **[sdrplay-rx-bridge-0.99.8-setup.exe](sdrplay-rx-bridge-0.99.8-setup.exe)**
+Download: **[sdrplay-rx-bridge-0.99.9-setup.exe](sdrplay-rx-bridge-0.99.9-setup.exe)**
 
-**Hot fix** — reverts v0.99.7's Low-IF-by-default change. v0.99.7
+**Low-IF mode is back, this time with the matching DSP.** v0.99.7
+shipped half a fix; v0.99.9 ships the rest. Default is still Zero-IF
+(no behavioural change unless you opt in via Settings → "IF mode").
+
+When you select "Low-IF 450 kHz" in Settings:
+- The SDRplay tunes its analog LO 450 kHz below the dial.
+- Chip runs at 4 Msps internally; API decimation by 2 brings the
+  output to 2 Msps (matching the rest of the bridge pipeline).
+- A complex NCO downconverter inside the bridge shifts the wanted
+  signal from +450 kHz IF down to baseband.
+- Net effect: wanted signal at dial freq, DC artifact at −450 kHz
+  from signal — outside the 96 kHz QMAP window.
+
+**Verification request**: please test on your sig-gen at 144.400 with
+WSJT-X dial at 144.400 and report what you see in QMAP wideband.
+Expected: clean carrier at dial centre, DC spike off-screen at
+dial − 450 kHz. If that's confirmed, v0.99.10 will flip the default
+to Low-IF.
+
+Why not Low-IF 1.62 MHz? At our 2 Msps complex output, +1.62 MHz is
+beyond Nyquist (fs/2 = 1 MHz) and aliases. Using IF_1_620 properly
+needs the chip running at 6+ Msps with our own decimating filter on
+the way into the bridge — deferred until somebody asks. The 96 kHz
+QMAP wideband path is fully served by IF_0_450's 600 kHz analog BW.
+
+Earlier — v0.99.8 hot fix reverting v0.99.7's broken Low-IF default. v0.99.7
 was based on the wrong assumption about how SDRplay's Low-IF mode
 works: in `IF_1_620` the SDRplay outputs IQ centered at the IF
 (1.62 MHz), not at the dial frequency, so the wanted signal sits at

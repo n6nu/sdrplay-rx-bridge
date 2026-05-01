@@ -1,5 +1,51 @@
 # SDRplay RX Bridge — Release Notes
 
+## v0.99.9 — beta (2026-05-01)
+
+**Low-IF mode is back, this time with the matching DSP.** v0.99.7
+shipped half a fix; v0.99.9 ships the rest. Default is still Zero-IF
+(no behavioural change for existing testers); Low-IF is opt-in via
+Settings → "IF mode" while it's verified on real signals.
+
+### What's actually in the box
+
+- `SdrplayDevice` now supports `IF_0_450` (the only IF mode that fits
+  within Nyquist at our 2 Msps complex output). When enabled:
+  - `fsHz` set to **4 MHz** at the chip; SDRplay's API decimation
+    (factor 2) brings the output stream to 2 Msps — matching the rest
+    of the bridge pipeline.
+  - Analog bandwidth filter narrows to 600 kHz (centred on the IF).
+  - **Complex NCO downconverter** in `SdrplayDevice::onStream` rotates
+    each int8 IQ pair by `exp(-j·2π·450 kHz·n / 2 Msps)` to shift the
+    wanted signal from +450 kHz IF down to baseband. Implemented as a
+    recursive complex rotor (cheap — ~10 multiplies per sample, with
+    periodic renormalisation against FP drift).
+  - **Net effect**: wanted signal at baseband, DC artifact (LO leakage,
+    ADC offset, 1/f noise) at −450 kHz from signal — outside the 96 kHz
+    QMAP window.
+
+### Tester verification expected before defaulting
+
+On the bench RSPduo this build streams at 1.99 Msps with peak |IQ|=19
+in IF_0_450 (matching the 1.97 Msps / peak 20 we get in Zero-IF). The
+math says the wanted signal should land back at baseband; that needs a
+real-signal check before we make Low-IF the default. Suggested test:
+sig-gen at 144.400 MHz, WSJT-X dial 144.400 MHz, look at QMAP wideband.
+- Zero-IF: DC spike at dial, sig-gen carrier on top of it.
+- IF_0_450: sig-gen carrier at dial (clean), DC spike off-screen at
+  dial − 450 kHz.
+
+If verification passes, v0.99.10 will flip the default to IF_0_450 and
+mark Zero-IF as the diagnostic option.
+
+### Why not Low-IF 1.62 MHz?
+
+`IF_1_620` and `IF_2_048` would put the wanted signal beyond Nyquist
+at our 2 Msps output (fs/2 = 1 MHz). Using them properly needs the
+chip running at 6+ Msps with our own decimating filter on the way
+into the bridge pipeline — deferred until somebody asks. The 96 kHz
+QMAP wideband path is fully served by IF_0_450's 600 kHz analog BW.
+
 ## v0.99.8 — beta (2026-04-30)
 
 **Hot fix**: revert v0.99.7's Low-IF-by-default change. Tester report
