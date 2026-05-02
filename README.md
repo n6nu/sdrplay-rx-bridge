@@ -17,9 +17,23 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest release — v1.0.2
+## Latest release — v1.0.3
 
-Download: **[sdrplay-rx-bridge-1.0.2-setup.exe](sdrplay-rx-bridge-1.0.2-setup.exe)**
+Download: **[sdrplay-rx-bridge-1.0.3-setup.exe](sdrplay-rx-bridge-1.0.3-setup.exe)**
+
+**Multi-instance support.** Run two SDRplays (or one SDRplay + a
+sibling RX bridge) side-by-side — different WSJT-X instances,
+different QMAP instances — without shared state. New `--instance
+<name>` CLI flag namespaces the INI; new **Settings → "Linrad TCP
+port"** / **"Linrad UDP port"** rows let two bridges feed two QMAPs
+without colliding. See RELEASE_NOTES.md for the full multi-instance
+walkthrough.
+
+Drop-in upgrade from v1.0.2.
+
+---
+
+## v1.0.2 — Spectrum waterfall toggle
 
 **Spectrum waterfall is now optional.** The built-in waterfall display
 can be turned off when you don't need the visual debug info — useful if

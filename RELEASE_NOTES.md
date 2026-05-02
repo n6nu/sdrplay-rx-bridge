@@ -1,5 +1,29 @@
 # SDRplay RX Bridge — Release Notes
 
+## v1.0.3 — multi-instance support (multi-band ops) (2026-05-02)
+
+Run two SDRplays (or one SDRplay + a sibling RX bridge) side-by-side
+— different WSJT-X instances, different QMAP instances — without
+shared state.
+
+- New `--instance <name>` CLI flag. Namespaces the INI file, window
+  title, and taskbar entry. `sdrplay-rx-bridge.exe --instance 23cm`
+  reads/writes `SDRplay RX Bridge - 23cm.ini`.
+- New **Settings → "Linrad TCP port"** + **"Linrad UDP port"**
+  spinboxes (defaults 49812 / 50004). Increment per bridge instance
+  for multi-QMAP setups. CLI: `--linrad-tcp-port`,
+  `--linrad-udp-port`. INI: `linrad/tcp_port`, `linrad/udp_port`.
+  Take effect on next launch.
+
+See the RTL-SDR v0.99.8 notes for a full step-by-step multi-instance
+workflow — same shape on SDRplay, just a different radio. No
+SDRplay-side device-serial picker yet (lands in a future bump);
+two SDRplays on the same machine currently both bind to whichever
+the SDRplay API hands out first. Single-SDRplay-plus-RTL-SDR (or
+HackRF / AirSpy / Malachite) multi-instance setups work today.
+
+Drop-in upgrade from v1.0.2. Existing single-instance INIs unchanged.
+
 ## v1.0.2 — spectrum waterfall toggle (2026-05-02)
 
 The built-in spectrum / waterfall display can now be turned off from
