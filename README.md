@@ -17,9 +17,27 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest release — v1.0.1
+## Latest release — v1.0.2
 
-Download: **[sdrplay-rx-bridge-1.0.1-setup.exe](sdrplay-rx-bridge-1.0.1-setup.exe)**
+Download: **[sdrplay-rx-bridge-1.0.2-setup.exe](sdrplay-rx-bridge-1.0.2-setup.exe)**
+
+**Spectrum waterfall is now optional.** The built-in waterfall display
+can be turned off when you don't need the visual debug info — useful if
+you're running on a smaller screen or want to free a couple percent of
+CPU.
+
+- **View → "Show spectrum waterfall"** (or **Ctrl+W**) toggles it.
+- New CLI flag `--no-waterfall` launches with the display already off.
+- Default ON — existing testers see no change unless they turn it off.
+- When off, the bridge skips the per-IQ-buffer FFT compute work, the
+  paint events, and the 20 Hz row-poll timer. Roughly 2–5 % of one
+  CPU core saved at 2 Msps; more on slower boxes.
+- Setting persists across launches (INI key `gui/waterfall_enabled`).
+
+Drop-in upgrade from v1.0.x — no INI migration, no behaviour change for
+operators who like the waterfall.
+
+### v1.0.1 — 14-bit audio + waterfall
 
 **Audio path now runs at full 14-bit precision** to match the QMAP path
 that v1.0.0 already widened. v1.0.0 routed int16 only to `LinradServer`
@@ -28,13 +46,10 @@ int8 view, capping the WSJT-X audio path and the waterfall display at
 the same 8-bit dynamic range we shipped through 0.99.x.
 
 - `SsbDemodulator` gains an `int16` overload — WSJT-X RX audio now
-  inherits the SDRplay's full 14-bit ADC range. In practice this
-  matters when a strong adjacent carrier was eating into AGC
-  headroom.
+  inherits the SDRplay's full 14-bit ADC range.
 - `FftEngine` gains an `int16` overload — main-window waterfall
   contrast on weak signals improves accordingly.
-- HackRF and RTL-SDR sibling apps are unchanged (their HW is int8).
-- Drop-in upgrade from v1.0.0; no INI changes, no migration.
+- HackRF and RTL-SDR sibling apps unchanged (their HW is int8).
 
 ### v1.0.0 — first stable
 

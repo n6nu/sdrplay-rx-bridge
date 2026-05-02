@@ -1,5 +1,27 @@
 # SDRplay RX Bridge — Release Notes
 
+## v1.0.2 — spectrum waterfall toggle (2026-05-02)
+
+The built-in spectrum / waterfall display can now be turned off from
+the **View menu** (or the **Ctrl+W** shortcut). Useful when you don't
+need the visual debugging and would rather not pay the CPU cost.
+
+- View → "Show spectrum waterfall" — checkable, default on.
+- New CLI flag `--no-waterfall` launches with the display off and
+  persists the choice to INI key `gui/waterfall_enabled`.
+- When off, three layers of work are skipped: the per-IQ-buffer
+  `FftEngine::pushIq()` (the per-sample int16→float + Hann window
+  multiply at the full 2 Msps rate — the biggest cost), the widget
+  paint events, and the 20 Hz internal timer that polls completed
+  rows. Net saving roughly 2–5 % of one CPU core at 2 Msps; more
+  on slower boxes (Pi 4 / older laptops).
+- Default ON for first installs and for upgrades from v1.0.x — no
+  surprise change for testers who liked seeing the waterfall.
+- One-line diagnostic in the log every time it toggles:
+  `[GUI] Spectrum waterfall ON|off`.
+
+No INI / migration changes; v1.0.2 is a drop-in upgrade from v1.0.1.
+
 ## v1.0.1 — 14-bit audio + waterfall (2026-05-01)
 
 **Audio path now runs at full 14-bit precision** to match the
