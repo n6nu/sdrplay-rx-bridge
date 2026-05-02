@@ -17,9 +17,19 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest release — v1.0.3
+## Latest release — v1.0.4
 
-Download: **[sdrplay-rx-bridge-1.0.3-setup.exe](sdrplay-rx-bridge-1.0.3-setup.exe)**
+Download: **[sdrplay-rx-bridge-1.0.4-setup.exe](sdrplay-rx-bridge-1.0.4-setup.exe)**
+
+What's new in v1.0.4 (2026-05-02) — bridge-core inheritance: the
+built-in spectrum / waterfall display now labels its frequency
+axis from the actual IQ sample rate instead of the hardcoded
+2 MHz default. Affects rare runtime configurations where the
+SDRplay sample rate is overridden away from the 2 Msps default.
+
+---
+
+### v1.0.3 — Multi-instance support (multi-band ops)
 
 **Multi-instance support.** Run two SDRplays (or one SDRplay + a
 sibling RX bridge) side-by-side — different WSJT-X instances,

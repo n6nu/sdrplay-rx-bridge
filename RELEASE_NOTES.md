@@ -1,5 +1,15 @@
 # SDRplay RX Bridge — Release Notes
 
+## v1.0.4 — waterfall span matches sample rate (2026-05-02)
+
+Bridge-core inheritance: the built-in spectrum / waterfall display
+now labels its frequency axis from the actual IQ sample rate
+(`FftEngine::sampleRateHz()`) instead of the hardcoded 2 MHz default.
+Affects rare runtime configurations where the SDRplay sample rate is
+overridden away from the 2 Msps default.
+
+Drop-in upgrade from v1.0.3.
+
 ## v1.0.3 — multi-instance support (multi-band ops) (2026-05-02)
 
 Run two SDRplays (or one SDRplay + a sibling RX bridge) side-by-side
