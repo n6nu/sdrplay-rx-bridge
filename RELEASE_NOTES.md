@@ -1,5 +1,21 @@
 # SDRplay RX Bridge — Release Notes
 
+## v1.0.5 — opt-in CAT server for WSJT-X Doppler tracking (2026-05-04)
+
+Adds the same CAT pattern that landed in pluto-rx-bridge,
+rtlsdr-rx-bridge, hackrf-rx-bridge, etc. With WSJT-X
+**Rig = Hamlib NET rigctl** at `127.0.0.1:4538`, Doppler tracking
+commands corrected freq directly to the bridge.
+
+- Rigctld TCP server on port **4538**, default OFF.
+- Toggle in Settings → CAT server (or `--cat` CLI). Restart bridge.
+- Auto-detect UDP mute when a CAT client is connected.
+- Live source indicator in window title:
+  `— UDP` / `— UDP (CAT idle)` / `— CAT (n)`.
+- Picks up the bridge-core data-mode-PTT fixes for PKTUSB / PKTLSB.
+
+INI compatible with v1.0.4. Drop-in upgrade.
+
 ## v1.0.4 — waterfall span matches sample rate (2026-05-02)
 
 Bridge-core inheritance: the built-in spectrum / waterfall display
