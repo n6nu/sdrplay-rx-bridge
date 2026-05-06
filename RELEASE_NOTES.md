@@ -1,5 +1,14 @@
 # SDRplay RX Bridge — Release Notes
 
+## v1.1.1 — capability-gated IQ rate combo (2026-05-05)
+
+Tightens the IQ-rate combo. Internally adds a per-device capability
+list; only sound-card-IQ devices currently restrict their offered
+rates -- RF-side bridges (HackRF / RTL-SDR / SDRplay / Pluto / AirSpy)
+are unchanged in behaviour and still offer 96 / 128 / 192 / 256 kHz.
+
+Drop-in upgrade from v1.1.0. No INI changes.
+
 ## v1.1.0 — UI refresh: fixed window, Settings menu, Linrad rate readout (2026-05-05)
 
 User-visible polish across the bridge UI; no behavioural changes on

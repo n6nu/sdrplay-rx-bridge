@@ -17,7 +17,18 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest release — v1.1.0
+## Latest release — v1.1.1
+
+Download: **[sdrplay-rx-bridge-1.1.1-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.1-setup.exe)**
+
+What's new in v1.1.1 (2026-05-05) -- internal: per-device IQ-rate
+capability gating in the Settings combo. RF-side bridges (this one
+included) offer the same 96 / 128 / 192 / 256 kHz options as before;
+the sound-card-IQ bridge (iq-rx-bridge) now hides rates above the
+sound card's actual rate. Drop-in upgrade.
+
+---
+### Previous release — v1.1.0
 
 Download: **[sdrplay-rx-bridge-1.1.0-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.0-setup.exe)**
 
@@ -32,8 +43,6 @@ side-by-side, plus a new **Linrad IQ rate** combo (defaults to
 
 Drop-in upgrade. Wire format unchanged at 96 kHz; INI compatible
 with v1.0.x.
-
----
 
 ### v1.0.5 — Opt-in CAT server for WSJT-X Doppler tracking
 
