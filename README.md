@@ -17,15 +17,40 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest release — v1.0.4
+## Latest release — v1.1.0
 
-Download: **[sdrplay-rx-bridge-1.0.4-setup.exe](sdrplay-rx-bridge-1.0.4-setup.exe)**
+Download: **[sdrplay-rx-bridge-1.1.0-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.0-setup.exe)**
 
-What's new in v1.0.4 (2026-05-02) — bridge-core inheritance: the
-built-in spectrum / waterfall display now labels its frequency
-axis from the actual IQ sample rate instead of the hardcoded
-2 MHz default. Affects rare runtime configurations where the
-SDRplay sample rate is overridden away from the 2 Msps default.
+What's new in v1.1.0 (2026-05-05) — UI refresh. Main window is now
+fixed-size 400×640 (no more drift across sessions). Settings moved
+from a button to a top-level **Settings** menu (shortcut `Ctrl+,`)
+to free a row for the waterfall. New **Linrad rate** readout in the
+State grid shows the active output IQ rate at a glance. Settings
+dialog reflowed with the radio gain panel and bridge-wide controls
+side-by-side, plus a new **Linrad IQ rate** combo (defaults to
+"96 kHz (QMAP Default)").
+
+Drop-in upgrade. Wire format unchanged at 96 kHz; INI compatible
+with v1.0.x.
+
+---
+
+### v1.0.5 — Opt-in CAT server for WSJT-X Doppler tracking
+
+Adds the same CAT pattern that landed across the bridge family.
+With WSJT-X **Rig = Hamlib NET rigctl** at `127.0.0.1:4538`,
+Doppler tracking commands corrected freq directly to the bridge.
+Default OFF; toggle in Settings → CAT or `--cat` CLI.
+
+---
+
+### v1.0.4 — Waterfall span matches sample rate
+
+Bridge-core inheritance: the built-in spectrum / waterfall display
+now labels its frequency axis from the actual IQ sample rate instead
+of the hardcoded 2 MHz default. Affects rare runtime configurations
+where the SDRplay sample rate is overridden away from the 2 Msps
+default.
 
 ---
 
