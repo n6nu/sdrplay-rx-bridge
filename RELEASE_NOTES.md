@@ -1,5 +1,22 @@
 # SDRplay RX Bridge — Release Notes
 
+## v1.1.2 — DC blocker for zero-IF receivers (2026-05-05)
+
+DC blocker for zero-IF receivers, removes the LO-leakage spike that
+FunCube Pro+ V2 / HackRF / RTL-SDR / Pluto / AirSpy leak at the centre
+of the spectrum. Per-sample IIR high-pass at the front of both the
+on-screen waterfall (FftEngine) and the QMAP wire path (LinradServer);
+cutoff = 100 Hz, well below any audio offset Q65 / FT8 cares about.
+
+Toggle in Settings → "DC blocker (zero-IF spike removal)", default ON.
+Toggling on also resets the I/Q balance EMA so a stale DC accumulator
+from earlier samples doesn't keep subtracting against now-DC-free
+input for ~2 s.
+
+Drop-in upgrade from v1.1.1. INI key linrad/dc_block_enabled added
+(default true; honours the previous behaviour for anyone who never
+opens Settings).
+
 ## v1.1.1 — capability-gated IQ rate combo (2026-05-05)
 
 Tightens the IQ-rate combo. Internally adds a per-device capability
