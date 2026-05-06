@@ -17,7 +17,18 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest release — v1.1.2
+## Latest release — v1.1.3
+
+Download: **[sdrplay-rx-bridge-1.1.3-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.3-setup.exe)**
+
+What's new in v1.1.3 (2026-05-06) -- DC blocker default-off for
+RF-direct receivers (HackRF / RTL-SDR / SDRplay / Pluto / AirSpy)
+since their SDR API already does hardware DC correction. Settings
+checkbox is grayed out for those radios. Sound-card-IQ sources
+(FunCube etc.) keep DC blocker default-on. Drop-in upgrade.
+
+---
+### Previous release — v1.1.2
 
 Download: **[sdrplay-rx-bridge-1.1.2-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.2-setup.exe)**
 
@@ -26,8 +37,6 @@ receivers. New "DC blocker (zero-IF spike removal)" checkbox in
 Settings (default ON) chews through the LO-leakage spike at the
 centre of the on-screen waterfall and the QMAP wideband display.
 100 Hz notch, irrelevant for Q65 / FT8 audio. Drop-in upgrade.
-
----
 ### Previous release — v1.1.1
 
 Download: **[sdrplay-rx-bridge-1.1.1-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.1-setup.exe)**

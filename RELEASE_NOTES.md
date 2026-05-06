@@ -1,5 +1,25 @@
 # SDRplay RX Bridge — Release Notes
 
+## v1.1.3 — DC blocker default-off for RF-direct receivers (2026-05-06)
+
+DC blocker is now default-OFF for RF-direct receivers (HackRF /
+RTL-SDR / SDRplay / Pluto / AirSpy) and grayed out in Settings.
+Their hardware DC correction at the SDR API level (and SDRplay's
+Low-IF NCO chain in particular) handles the chip's residual offset
+upstream; the v1.1.2 software IIR HP was redundant for these radios
+and produced a small spike at QMAP centre on the SDRplay Low-IF
+path (G3WDG bench report 2026-05-06).
+
+Sound-card-IQ sources (FunCube Pro+ V2, FlexRadio DAX-IQ, Malachite
+via iq-rx-bridge) keep the DC blocker default-ON: they have no
+hardware DC mitigation, the LO leakage is real, and the IIR HP
+is the only thing notching it out.
+
+INI key linrad/dc_block_enabled is unchanged; existing INIs keep
+their stored value. Only the first-launch default flips per device.
+
+Drop-in upgrade from v1.1.2.
+
 ## v1.1.2 — DC blocker for zero-IF receivers (2026-05-05)
 
 DC blocker for zero-IF receivers, removes the LO-leakage spike that
