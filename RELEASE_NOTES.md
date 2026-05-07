@@ -1,5 +1,21 @@
 # SDRplay RX Bridge — Release Notes
 
+
+## v1.1.4 — DC blocker user-enableable on RF-direct receivers (2026-05-07)
+
+The DC blocker checkbox is now editable on RF-direct receivers
+(HackRF / RTL-SDR / SDRplay / Pluto / AirSpy) — previously locked
+greyed-out as of v1.1.3. Default state is unchanged (OFF on
+RF-direct, ON on sound-card sources), so the on-the-bench behaviour
+of a fresh install is identical. Diagnostic scenarios that want
+the software IIR HP back on can now toggle it from Settings without
+an INI edit.
+
+Sound-card-IQ sources (FunCube Pro+ V2, FlexRadio DAX-IQ, Malachite
+via iq-rx-bridge): unchanged.
+
+Drop-in upgrade from v1.1.3.
+
 ## v1.1.3 — DC blocker default-off for RF-direct receivers (2026-05-06)
 
 DC blocker is now default-OFF for RF-direct receivers (HackRF /

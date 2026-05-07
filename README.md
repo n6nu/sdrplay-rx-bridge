@@ -17,7 +17,18 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest release — v1.1.3
+## Latest release — v1.1.4
+
+Download: **[sdrplay-rx-bridge-1.1.4-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.4-setup.exe)**
+
+What's new in v1.1.4 (2026-05-07) -- DC blocker on RF-direct receivers
+is now user-enableable from Settings. Default state unchanged (OFF
+on RF-direct, ON on sound-card sources); previously the checkbox
+was locked greyed-out on RF-direct radios since v1.1.3. Drop-in
+upgrade.
+
+---
+### Previous release — v1.1.3
 
 Download: **[sdrplay-rx-bridge-1.1.3-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.3-setup.exe)**
 
