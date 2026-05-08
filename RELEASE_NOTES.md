@@ -1,6 +1,26 @@
 # SDRplay RX Bridge — Release Notes
 
 
+
+## v1.1.5 -- Help-menu polish + LGPL compliance + bundled user guide (2026-05-08)
+
+Quality release on top of v1.1.4. No functional changes to the
+RF / decode / wire paths.
+
+New Help menu (View menu joined by Help):
+  - Help -> User Guide (F1): opens the bundled beta-tester guide
+    PDF in the system PDF reader.
+  - Help -> About Qt: standard Qt LGPLv3 attribution dialog.
+
+LGPL compliance polish:
+  - Beta-tester guide PDF now ships with each installer.
+  - Full text of LGPL-3.0 (Qt 6) and LGPL-2.1 (SoXR / libusb)
+    ship in the install dir at Licenses/.
+  - THIRD_PARTY_LICENSES.md gains an explicit source-availability
+    section pointing at the per-bridge repos and upstream URLs.
+
+Drop-in upgrade from v1.1.4.
+
 ## v1.1.4 — DC blocker user-enableable on RF-direct receivers (2026-05-07)
 
 The DC blocker checkbox is now editable on RF-direct receivers
