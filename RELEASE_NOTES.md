@@ -2,6 +2,56 @@
 
 
 
+## v1.1.18 — RSPduo HiZ-port support, gain Apply now sticks, robust open() (2026-05-10)
+
+Bench-iteration release on top of v1.1.5 covering the SDRplay-specific
+items reported during beta testing. Drop-in upgrade.
+
+Antenna selection (RSPduo):
+  - New "Tuner A — HiZ port" choice in the antenna combo, for HF
+    reception via the RSPduo's high-impedance front end.
+  - Combo now lists Tuner A — Antenna A (SMA) and Tuner A — HiZ
+    (HF only). RSPdx still gets its A/B/C combo unchanged.
+  - Tuner_B (Antenna B SMA) is temporarily disabled — single-tuner-
+    on-Tuner_B mode hit a cascade of API-routing issues that need
+    SDRplay sample-code reference to unblock. Practical impact is
+    low: Tuner B SMA has a hardware ~30 MHz HPF so it isn't
+    useful for HF anyway, and Tuner A SMA + HiZ together cover
+    HF and VHF+.
+  - Stale antenna_sel=1 saved from earlier beta builds is now
+    auto-remapped to Tuner A SMA at load with a stderr explanation.
+
+Gain spinbox changes now apply correctly (G3WDG + N6NU report):
+  - The Settings dialog's gRdB / LNA / AGC used to require a bridge
+    restart to take effect. Two root causes — fire-and-forget
+    Update() calls (no rc-check; silent API rejections), and the
+    Update tuner argument always being Tuner_A (silently dropped on
+    any Tuner_B session). Both fixed; rc failures now print
+    "[SDRplay] Update(<reason>) failed: rc=N — value will only take
+    effect on next bridge restart." so the symptom can't hide.
+
+Overload diagnostic (G3WDG report):
+  - Power-overload events used to spam stderr once per callback —
+    the resulting log flood was perceived as "transmission stopped"
+    even though the IQ stream itself was running. Now rate-limited:
+    first event prints gRdB / LNA / AGC / freq plus a fix hint;
+    subsequent events are counted silently and summarised every
+    5 s with the rolling rate. overloadEventCount() exposed for
+    future GUI rate indicator.
+
+Robust SDRplay open():
+  - sdrplay_api_Open() returning sdrplay_api_Fail (rc=1) is now
+    accompanied by a hint to restart "SDRplay API Service" via
+    Services.msc (the daemon getting stuck is the actual root
+    cause when this happens, not anything in the bridge).
+  - SelectDevice retries on Tuner A if Tuner B fails (defence in
+    depth for the Tuner B path that's temporarily disabled).
+  - New startup line reports which tuner the API actually opened
+    on, so saved INI antenna_sel vs the live tuner can't drift
+    silently.
+
+INI compatible with v1.1.5. No wire-format changes.
+
 ## v1.1.5 -- Help-menu polish + LGPL compliance + bundled user guide (2026-05-08)
 
 Quality release on top of v1.1.4. No functional changes to the

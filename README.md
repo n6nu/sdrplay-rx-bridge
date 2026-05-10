@@ -17,7 +17,23 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest release — v1.1.5
+## Latest release — v1.1.18
+
+Download: **[sdrplay-rx-bridge-1.1.18-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.18-setup.exe)**
+
+What's new in v1.1.18 (2026-05-10) — RSPduo HiZ-port now selectable
+from the antenna combo (HF reception). Gain spinbox changes now apply
+without restart (Apply was silently being dropped on Tuner_B-routed
+Updates). Power-overload diagnostic is rate-limited and reports gain
+context so a hot front end no longer floods the log. Robust open()
+with clear hint to restart "SDRplay API Service" when the daemon
+gets stuck. Tuner_B (Antenna B SMA) temporarily disabled — needs
+SDRplay sample-code reference to unblock; Tuner_B SMA has a hardware
+HPF so HF won't pass anyway, and Tuner_A SMA + HiZ together cover
+all practical bands. Drop-in upgrade from v1.1.5.
+
+---
+### Previous release — v1.1.5
 
 Download: **[sdrplay-rx-bridge-1.1.5-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.5-setup.exe)**
 
