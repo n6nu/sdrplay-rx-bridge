@@ -17,9 +17,27 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest release — v1.1.18
+## Latest release — v1.1.19
 
-Download: **[sdrplay-rx-bridge-1.1.18-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.18-setup.exe)**
+Download: **[sdrplay-rx-bridge-1.1.19-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/download/v1.1.19/sdrplay-rx-bridge-1.1.19-setup.exe)**
+
+What's new in v1.1.19 (2026-05-10) — adds a **software LO offset**
+spur-dodging knob (Settings → SDRplay → LO offset, range ±800 kHz,
+default 0 = disabled). When non-zero, the chip is forced into
+Zero-IF and tuned by the chosen offset; the bridge's NCO shifts the
+wanted signal back to the dial center. Different offset values
+produce different chip-LO positions and therefore different
+in-band PLL spur landscapes — dial in a value where the ±100 kHz
+window around your dial happens to be clean. Confirmed useful on
+RSPduo at 23 cm for moving Mirics MSi001 fractional-N spurs out
+of the EME sub-band. **Does not** help with 24 MHz × N reference-
+clock harmonics (those are hardware-level and stay at the same
+absolute frequency regardless of LO). Drop-in upgrade from v1.1.18.
+
+---
+### Previous release — v1.1.18
+
+Download: **[sdrplay-rx-bridge-1.1.18-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/download/v1.1.18/sdrplay-rx-bridge-1.1.18-setup.exe)**
 
 What's new in v1.1.18 (2026-05-10) — RSPduo HiZ-port now selectable
 from the antenna combo (HF reception). Gain spinbox changes now apply

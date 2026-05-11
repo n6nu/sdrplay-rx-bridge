@@ -2,6 +2,50 @@
 
 
 
+## v1.1.19 — software LO offset for spur-dodging (2026-05-10)
+
+Adds an advanced "LO offset" knob in Settings → SDRplay (range ±800
+kHz, step 50, default 0 = disabled). Sibling release on top of
+v1.1.18; no other functional changes.
+
+**What it does.** When non-zero, OVERRIDES the IF mode dropdown:
+the chip is forced into Zero-IF and tuned to (dial + lo_offset_khz),
+and the bridge's NCO mixer shifts the wanted signal back to the
+dial center. Net effect: the wanted signal stays exactly at the
+dial as the user expects, but the chip's actual LO position moves
+by the chosen offset. Each offset value produces a different chip-
+LO frequency and therefore a different in-band PLL spur landscape.
+
+**Why it exists.** The MSi001 tuner used by all RSP* receivers
+generates fractional-N synthesizer spurs that can land inside the
+±100 kHz QMAP window at higher frequencies. Two independent 23 cm
+EME testers (N6NU + KB2SA, both on RSPduo) reproduced a comb of
+spurs around 1296.085 MHz dial. Dialing in different LO offsets
+moves these spurs to different absolute frequencies and lets the
+user find one that's clean in the desired ±100 kHz of dial.
+
+**Important — what it does NOT fix.** Some in-band artifacts are
+**reference-clock harmonics** (e.g., the 24 MHz × 54 = 1296.000
+MHz harmonic that's particularly unlucky at 23 cm EME). Those are
+locked to the SDRplay's onboard reference oscillator and stay at
+the same absolute frequency regardless of the chip's tuning LO —
+no software workaround can move them. For reference-clock
+harmonics the only options are: dial off-frequency, hardware
+shield mod, or switch to a different RSP model.
+
+**How to use.**
+
+1. Settings → SDRplay → LO offset → enter a value (e.g., +300 kHz)
+2. Apply
+3. The bridge restarts the SDRplay stream and watches the result
+4. If spurs still inside the QMAP window, try a different value
+   (e.g., -300, +500, -500). Each one re-shuffles the spur pattern.
+5. Set back to 0 to re-enable the IF mode dropdown
+
+INI key: `sdrplay/lo_offset_khz` (signed integer kHz; 0 disables).
+
+Drop-in upgrade from v1.1.18.
+
 ## v1.1.18 — RSPduo HiZ-port support, gain Apply now sticks, robust open() (2026-05-10)
 
 Bench-iteration release on top of v1.1.5 covering the SDRplay-specific
