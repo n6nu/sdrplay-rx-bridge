@@ -1,208 +1,50 @@
 # SDRplay RX Bridge — Release Notes
 
+## v1.1.21 — TCP listen failure is non-fatal (2026-05-15)
 
+W3SZ (Roger) reported the bridge silently producing no UDP packets on
+his Win11 box. The Linrad parameter-server TCP listen on port 49812
+was failing with `WSAEACCES` ("address is protected") because Hyper-V
+on his system reserves the entire 49152–65535 upper ephemeral range.
+The previous code aborted `LinradServer::start()` on that failure, so
+the UDP socket was never created. **QMAP doesn't actually use the
+Linrad TCP handshake** — it only reads UDP packets — so the TCP server
+is non-essential to the normal bridge ↔ QMAP flow.
+
+Changes:
+- TCP listen failure now logs a warning (with a hint to check Windows
+  excluded-port ranges via `netsh int ipv4 show excludedportrange
+  protocol=tcp`) and the bridge continues in UDP-only mode.
+- TCP server, CAT server, and the outgoing UDP source socket all now
+  bind to `AnyIPv4` (0.0.0.0) explicitly, avoiding Qt's dual-stack
+  ambiguity where the auto-bound family could mismatch the IPv4 target.
+
+If your box hits the excluded-port issue and you want to keep the
+Linrad TCP handshake working (it's a convenience for QMAP's IQ-rate
+auto-detect), pick a TCP port outside the reserved ranges in
+**Settings → Network → Linrad TCP port** and match it in
+`qmap.ini` → `[Linrad] tcp_port=`. Drop-in upgrade from v1.1.19.
 
 ## v1.1.19 — software LO offset for spur-dodging (2026-05-10)
 
-Adds an advanced "LO offset" knob in Settings → SDRplay (range ±800
-kHz, step 50, default 0 = disabled). Sibling release on top of
-v1.1.18; no other functional changes.
+The MSi001 tuner used by all RSP* receivers has internal PLL spurs
+that can land inside the dial-centered visible window at higher
+frequencies. KB2SA + N6NU independently reproduced an in-band comb
+at 1296.085 MHz on RSPduo — confirmed chip-internal (different IF
+mode produced a completely different spur landscape; 50Ω term ruled
+out external RF).
 
-**What it does.** When non-zero, OVERRIDES the IF mode dropdown:
-the chip is forced into Zero-IF and tuned to (dial + lo_offset_khz),
-and the bridge's NCO mixer shifts the wanted signal back to the
-dial center. Net effect: the wanted signal stays exactly at the
-dial as the user expects, but the chip's actual LO position moves
-by the chosen offset. Each offset value produces a different chip-
-LO frequency and therefore a different in-band PLL spur landscape.
+New **Settings → LO offset** spinbox (range ±800 kHz, step 50 kHz,
+default 0 = disabled). When non-zero, OVERRIDES IF mode: the chip
+goes into Zero-IF tuned to (dial − offset), and the bridge's NCO
+shifts the wanted signal back to baseband. Each offset value
+produces a different chip-LO position and therefore a different
+spur landscape — try ±200/300/500 kHz steps to find a clean one for
+your band of interest. The wanted signal stays exactly at the
+dial; only the chip's internal artifact pattern moves.
 
-**Why it exists.** The MSi001 tuner used by all RSP* receivers
-generates fractional-N synthesizer spurs that can land inside the
-±100 kHz QMAP window at higher frequencies. Two independent 23 cm
-EME testers (N6NU + KB2SA, both on RSPduo) reproduced a comb of
-spurs around 1296.085 MHz dial. Dialing in different LO offsets
-moves these spurs to different absolute frequencies and lets the
-user find one that's clean in the desired ±100 kHz of dial.
-
-**Important — what it does NOT fix.** Some in-band artifacts are
-**reference-clock harmonics** (e.g., the 24 MHz × 54 = 1296.000
-MHz harmonic that's particularly unlucky at 23 cm EME). Those are
-locked to the SDRplay's onboard reference oscillator and stay at
-the same absolute frequency regardless of the chip's tuning LO —
-no software workaround can move them. For reference-clock
-harmonics the only options are: dial off-frequency, hardware
-shield mod, or switch to a different RSP model.
-
-**How to use.**
-
-1. Settings → SDRplay → LO offset → enter a value (e.g., +300 kHz)
-2. Apply
-3. The bridge restarts the SDRplay stream and watches the result
-4. If spurs still inside the QMAP window, try a different value
-   (e.g., -300, +500, -500). Each one re-shuffles the spur pattern.
-5. Set back to 0 to re-enable the IF mode dropdown
-
-INI key: `sdrplay/lo_offset_khz` (signed integer kHz; 0 disables).
-
-Drop-in upgrade from v1.1.18.
-
-## v1.1.18 — RSPduo HiZ-port support, gain Apply now sticks, robust open() (2026-05-10)
-
-Bench-iteration release on top of v1.1.5 covering the SDRplay-specific
-items reported during beta testing. Drop-in upgrade.
-
-Antenna selection (RSPduo):
-  - New "Tuner A — HiZ port" choice in the antenna combo, for HF
-    reception via the RSPduo's high-impedance front end.
-  - Combo now lists Tuner A — Antenna A (SMA) and Tuner A — HiZ
-    (HF only). RSPdx still gets its A/B/C combo unchanged.
-  - Tuner_B (Antenna B SMA) is temporarily disabled — single-tuner-
-    on-Tuner_B mode hit a cascade of API-routing issues that need
-    SDRplay sample-code reference to unblock. Practical impact is
-    low: Tuner B SMA has a hardware ~30 MHz HPF so it isn't
-    useful for HF anyway, and Tuner A SMA + HiZ together cover
-    HF and VHF+.
-  - Stale antenna_sel=1 saved from earlier beta builds is now
-    auto-remapped to Tuner A SMA at load with a stderr explanation.
-
-Gain spinbox changes now apply correctly (G3WDG + N6NU report):
-  - The Settings dialog's gRdB / LNA / AGC used to require a bridge
-    restart to take effect. Two root causes — fire-and-forget
-    Update() calls (no rc-check; silent API rejections), and the
-    Update tuner argument always being Tuner_A (silently dropped on
-    any Tuner_B session). Both fixed; rc failures now print
-    "[SDRplay] Update(<reason>) failed: rc=N — value will only take
-    effect on next bridge restart." so the symptom can't hide.
-
-Overload diagnostic (G3WDG report):
-  - Power-overload events used to spam stderr once per callback —
-    the resulting log flood was perceived as "transmission stopped"
-    even though the IQ stream itself was running. Now rate-limited:
-    first event prints gRdB / LNA / AGC / freq plus a fix hint;
-    subsequent events are counted silently and summarised every
-    5 s with the rolling rate. overloadEventCount() exposed for
-    future GUI rate indicator.
-
-Robust SDRplay open():
-  - sdrplay_api_Open() returning sdrplay_api_Fail (rc=1) is now
-    accompanied by a hint to restart "SDRplay API Service" via
-    Services.msc (the daemon getting stuck is the actual root
-    cause when this happens, not anything in the bridge).
-  - SelectDevice retries on Tuner A if Tuner B fails (defence in
-    depth for the Tuner B path that's temporarily disabled).
-  - New startup line reports which tuner the API actually opened
-    on, so saved INI antenna_sel vs the live tuner can't drift
-    silently.
-
-INI compatible with v1.1.5. No wire-format changes.
-
-## v1.1.5 -- Help-menu polish + LGPL compliance + bundled user guide (2026-05-08)
-
-Quality release on top of v1.1.4. No functional changes to the
-RF / decode / wire paths.
-
-New Help menu (View menu joined by Help):
-  - Help -> User Guide (F1): opens the bundled beta-tester guide
-    PDF in the system PDF reader.
-  - Help -> About Qt: standard Qt LGPLv3 attribution dialog.
-
-LGPL compliance polish:
-  - Beta-tester guide PDF now ships with each installer.
-  - Full text of LGPL-3.0 (Qt 6) and LGPL-2.1 (SoXR / libusb)
-    ship in the install dir at Licenses/.
-  - THIRD_PARTY_LICENSES.md gains an explicit source-availability
-    section pointing at the per-bridge repos and upstream URLs.
-
-Drop-in upgrade from v1.1.4.
-
-## v1.1.4 — DC blocker user-enableable on RF-direct receivers (2026-05-07)
-
-The DC blocker checkbox is now editable on RF-direct receivers
-(HackRF / RTL-SDR / SDRplay / Pluto / AirSpy) — previously locked
-greyed-out as of v1.1.3. Default state is unchanged (OFF on
-RF-direct, ON on sound-card sources), so the on-the-bench behaviour
-of a fresh install is identical. Diagnostic scenarios that want
-the software IIR HP back on can now toggle it from Settings without
-an INI edit.
-
-Sound-card-IQ sources (FunCube Pro+ V2, FlexRadio DAX-IQ, Malachite
-via iq-rx-bridge): unchanged.
-
-Drop-in upgrade from v1.1.3.
-
-## v1.1.3 — DC blocker default-off for RF-direct receivers (2026-05-06)
-
-DC blocker is now default-OFF for RF-direct receivers (HackRF /
-RTL-SDR / SDRplay / Pluto / AirSpy) and grayed out in Settings.
-Their hardware DC correction at the SDR API level (and SDRplay's
-Low-IF NCO chain in particular) handles the chip's residual offset
-upstream; the v1.1.2 software IIR HP was redundant for these radios
-and produced a small spike at QMAP centre on the SDRplay Low-IF
-path (G3WDG bench report 2026-05-06).
-
-Sound-card-IQ sources (FunCube Pro+ V2, FlexRadio DAX-IQ, Malachite
-via iq-rx-bridge) keep the DC blocker default-ON: they have no
-hardware DC mitigation, the LO leakage is real, and the IIR HP
-is the only thing notching it out.
-
-INI key linrad/dc_block_enabled is unchanged; existing INIs keep
-their stored value. Only the first-launch default flips per device.
-
-Drop-in upgrade from v1.1.2.
-
-## v1.1.2 — DC blocker for zero-IF receivers (2026-05-05)
-
-DC blocker for zero-IF receivers, removes the LO-leakage spike that
-FunCube Pro+ V2 / HackRF / RTL-SDR / Pluto / AirSpy leak at the centre
-of the spectrum. Per-sample IIR high-pass at the front of both the
-on-screen waterfall (FftEngine) and the QMAP wire path (LinradServer);
-cutoff = 100 Hz, well below any audio offset Q65 / FT8 cares about.
-
-Toggle in Settings → "DC blocker (zero-IF spike removal)", default ON.
-Toggling on also resets the I/Q balance EMA so a stale DC accumulator
-from earlier samples doesn't keep subtracting against now-DC-free
-input for ~2 s.
-
-Drop-in upgrade from v1.1.1. INI key linrad/dc_block_enabled added
-(default true; honours the previous behaviour for anyone who never
-opens Settings).
-
-## v1.1.1 — capability-gated IQ rate combo (2026-05-05)
-
-Tightens the IQ-rate combo. Internally adds a per-device capability
-list; only sound-card-IQ devices currently restrict their offered
-rates -- RF-side bridges (HackRF / RTL-SDR / SDRplay / Pluto / AirSpy)
-are unchanged in behaviour and still offer 96 / 128 / 192 / 256 kHz.
-
-Drop-in upgrade from v1.1.0. No INI changes.
-
-## v1.1.0 — UI refresh: fixed window, Settings menu, Linrad rate readout (2026-05-05)
-
-User-visible polish across the bridge UI; no behavioural changes on
-the wire (96 kHz IQ format unchanged).
-
-- **Fixed-size 400×640 main window**. Replaces the freely-resizable
-  640×540 minimum. Window opens identically every session and
-  doesn't drift; conditional banners (manual-freq override,
-  transverter IF readout) word-wrap rather than clip.
-- **Settings is a top-level menu** in the menu bar (shortcut
-  `Ctrl+,`) — was a button at the bottom of the State group. Frees
-  ~40 px of vertical real estate for the waterfall.
-- **Linrad rate readout** in the State grid, between the device row
-  and RX status. Reads the active LinradServer output rate; matches
-  what's persisted in the INI.
-- **Settings dialog reflow**: radio gain panel and bridge-wide
-  group sit horizontally side-by-side. Was vertical, ran past the
-  bottom of 1080p laptops with the deeper panels (SDRplay
-  especially).
-- **New "Linrad IQ rate" combo** in the Settings dialog. Defaults
-  to "96 kHz (QMAP Default)" — same wire format as before; matches
-  every shipped QMAP release.
-- UDP data port (`50004`) and Linrad host (`127.0.0.1`) /
-  TCP port (`49812`) editors gained tooltips explaining their use
-  in multi-instance setups.
-
-INI compatible with v1.0.x. Drop-in upgrade.
+INI key: `sdrplay/lo_offset_khz` (integer kHz). 0 = disabled (use
+the IF mode dropdown). Drop-in upgrade from v1.1.18.
 
 ## v1.0.5 — opt-in CAT server for WSJT-X Doppler tracking (2026-05-04)
 

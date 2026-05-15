@@ -17,7 +17,27 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest release — v1.1.19
+## Latest release — v1.1.21
+
+Download: **[sdrplay-rx-bridge-1.1.21-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.21-setup.exe)**
+
+What's new in v1.1.21 (2026-05-15) — **TCP listen failure is now
+non-fatal.** W3SZ (Roger) reported the bridge silently dropping all
+UDP packets on his Win11 box: the Linrad parameter-server TCP listen
+on port 49812 was failing with `WSAEACCES` ("address is protected")
+because Hyper-V on his system reserves the entire 49152–65535 upper
+ephemeral range, and the previous code aborted `LinradServer::start()`
+on that failure so the UDP socket was never created. QMAP doesn't
+actually use the Linrad TCP handshake — it only reads UDP — so the
+TCP server is non-essential to the normal bridge ↔ QMAP flow. This
+release logs the failure (with a hint to check `netsh int ipv4 show
+excludedportrange protocol=tcp`) and continues in UDP-only mode. All
+three sockets (Linrad TCP, CAT TCP, outgoing UDP source) now bind
+to `AnyIPv4` explicitly, avoiding Qt's dual-stack ambiguity on Win11.
+Drop-in upgrade from v1.1.19.
+
+---
+### Previous release — v1.1.19
 
 Download: **[sdrplay-rx-bridge-1.1.19-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/download/v1.1.19/sdrplay-rx-bridge-1.1.19-setup.exe)**
 
