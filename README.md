@@ -17,9 +17,26 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest release — v1.1.21
+## Latest release — v1.2.7
 
-Download: **[sdrplay-rx-bridge-1.1.21-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.21-setup.exe)**
+Download: **[sdrplay-rx-bridge-1.2.7-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.2.7-setup.exe)**
+
+What's new in v1.2.7 (2026-05-19) — Linrad bandwidth selector in
+Settings (96 / 128 / 192 / 256 kHz, automatically clamped to the
+device's input rate). Changing it hot-restarts the running
+LinradServer in place — no bridge restart needed — and QMAP-in-Auto
+picks up the new rate via the Linrad TCP handshake (49812) within
+~4 s, with automatic relaunch into the new rate. Status-panel layout
+cleanup: 12 pt font (no more clipped descenders on the bottom TCI
+row), audio peak meter folded into the State group, gain row at 9 pt
+so the full `gRdB N LNA N BIAS off` string fits in the 400 px window,
+waterfall capped at 180 px with a visible bottom margin. No RF /
+decode / wire-format changes from v1.1.21.
+
+---
+### Previous release — v1.1.21
+
+Download: **[sdrplay-rx-bridge-1.1.21-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/download/v1.1.21/sdrplay-rx-bridge-1.1.21-setup.exe)**
 
 What's new in v1.1.21 (2026-05-15) — **TCP listen failure is now
 non-fatal.** W3SZ (Roger) reported the bridge silently dropping all
