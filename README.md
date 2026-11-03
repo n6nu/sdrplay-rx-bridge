@@ -17,9 +17,24 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 
 ---
 
-## Latest release — v1.2.7
+## Current build
 
-Download: **[sdrplay-rx-bridge-1.2.7-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.2.7-setup.exe)**
+V3 is close to release, and the current build is well ahead of the
+published releases below:
+
+**[sdrplay-rx-bridge-3.1.11-setup.exe](https://bridges.n6nu.org/beta/sdrplay-rx-bridge-3.1.11-setup.exe)**
+
+Prefer it over the releases listed below: every installer up to and including v2.1.1 was packaged without the
+Microsoft Visual C++ runtime, so on a clean Windows machine it starts and
+closes again immediately. Installing the Microsoft Visual C++
+Redistributable cures that. The current build
+bundles the runtime.
+
+---
+
+## Release v1.2.7
+
+Download: **[sdrplay-rx-bridge-1.2.7-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/download/v1.2.7/sdrplay-rx-bridge-1.2.7-setup.exe)**
 
 What's new in v1.2.7 (2026-05-19) — Linrad bandwidth selector in
 Settings (96 / 128 / 192 / 256 kHz, automatically clamped to the
@@ -90,7 +105,7 @@ all practical bands. Drop-in upgrade from v1.1.5.
 ---
 ### Previous release — v1.1.5
 
-Download: **[sdrplay-rx-bridge-1.1.5-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.5-setup.exe)**
+Download: **[sdrplay-rx-bridge-1.1.5-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/download/v1.1.5/sdrplay-rx-bridge-1.1.5-setup.exe)**
 
 What's new in v1.1.5 (2026-05-08) -- Quality release. New Help menu
 with User Guide (F1) opening the bundled beta-tester PDF, and
@@ -102,7 +117,7 @@ section. No RF / decode / wire-format changes. Drop-in upgrade.
 ---
 ### Previous release — v1.1.4
 
-Download: **[sdrplay-rx-bridge-1.1.4-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.4-setup.exe)**
+Download: **[sdrplay-rx-bridge-1.1.4-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/download/v1.1.4/sdrplay-rx-bridge-1.1.4-setup.exe)**
 
 What's new in v1.1.4 (2026-05-07) -- DC blocker on RF-direct receivers
 is now user-enableable from Settings. Default state unchanged (OFF
@@ -113,7 +128,7 @@ upgrade.
 ---
 ### Previous release — v1.1.3
 
-Download: **[sdrplay-rx-bridge-1.1.3-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.3-setup.exe)**
+Download: **[sdrplay-rx-bridge-1.1.3-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/download/v1.1.3/sdrplay-rx-bridge-1.1.3-setup.exe)**
 
 What's new in v1.1.3 (2026-05-06) -- DC blocker default-off for
 RF-direct receivers (HackRF / RTL-SDR / SDRplay / Pluto / AirSpy)
@@ -124,7 +139,7 @@ checkbox is grayed out for those radios. Sound-card-IQ sources
 ---
 ### Previous release — v1.1.2
 
-Download: **[sdrplay-rx-bridge-1.1.2-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.2-setup.exe)**
+Download: **[sdrplay-rx-bridge-1.1.2-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/download/v1.1.2/sdrplay-rx-bridge-1.1.2-setup.exe)**
 
 What's new in v1.1.2 (2026-05-05) -- DC blocker for zero-IF
 receivers. New "DC blocker (zero-IF spike removal)" checkbox in
@@ -133,7 +148,7 @@ centre of the on-screen waterfall and the QMAP wideband display.
 100 Hz notch, irrelevant for Q65 / FT8 audio. Drop-in upgrade.
 ### Previous release — v1.1.1
 
-Download: **[sdrplay-rx-bridge-1.1.1-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.1-setup.exe)**
+Download: **[sdrplay-rx-bridge-1.1.1-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/download/v1.1.1/sdrplay-rx-bridge-1.1.1-setup.exe)**
 
 What's new in v1.1.1 (2026-05-05) -- internal: per-device IQ-rate
 capability gating in the Settings combo. RF-side bridges (this one
@@ -142,7 +157,7 @@ the sound-card-IQ bridge (iq-rx-bridge) now hides rates above the
 sound card's actual rate. Drop-in upgrade.
 ### Previous release — v1.1.0
 
-Download: **[sdrplay-rx-bridge-1.1.0-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/latest/download/sdrplay-rx-bridge-1.1.0-setup.exe)**
+Download: **[sdrplay-rx-bridge-1.1.0-setup.exe](https://github.com/n6nu/sdrplay-rx-bridge/releases/download/v1.1.0/sdrplay-rx-bridge-1.1.0-setup.exe)**
 
 What's new in v1.1.0 (2026-05-05) — UI refresh. Main window is now
 fixed-size 400×640 (no more drift across sessions). Settings moved
