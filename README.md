@@ -22,7 +22,7 @@ Author: **Andreas Junge, N6NU** &lt;<n6nu@arrl.net>&gt;.
 V3 is close to release, and the current build is well ahead of the
 published releases below:
 
-**[sdrplay-rx-bridge-3.1.11-setup.exe](https://bridges.n6nu.org/beta/sdrplay-rx-bridge-3.1.11-setup.exe)**
+**[sdrplay-rx-bridge-3.1.12-setup.exe](https://bridges.n6nu.org/beta/sdrplay-rx-bridge-3.1.12-setup.exe)**
 
 Prefer it over the releases listed below: every installer up to and including v2.1.1 was packaged without the
 Microsoft Visual C++ runtime, so on a clean Windows machine it starts and
